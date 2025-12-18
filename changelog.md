@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [1.6.1] - 2025-12-18
 
+### Added
+
+- AGENTS.md with codebase instructions for AI coding agents
+
 ### Changed
 
 - Added Firecrawl import to all "When to sync vs deploy" tables in docs

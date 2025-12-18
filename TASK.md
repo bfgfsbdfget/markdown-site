@@ -2,7 +2,7 @@
 
 ## Current Status
 
-v1.5.0 ready for deployment. Build passes. TypeScript verified.
+v1.6.1 ready for deployment. Build passes. TypeScript verified.
 
 ## Completed
 
@@ -40,6 +40,11 @@ v1.5.0 ready for deployment. Build passes. TypeScript verified.
 - [x] Logo gallery with continuous marquee scroll
 - [x] Frontmatter-controlled featured items (featured, featuredOrder)
 - [x] Featured items sync with npm run sync (no redeploy needed)
+- [x] Firecrawl content importer (npm run import)
+- [x] /api/export endpoint for batch content fetching
+- [x] AI plugin discovery at /.well-known/ai-plugin.json
+- [x] OpenAPI 3.0 spec at /openapi.yaml
+- [x] AGENTS.md for AI coding agents
 
 ## Deployment Steps
 

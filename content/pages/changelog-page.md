@@ -15,6 +15,7 @@ Released December 18, 2025
 
 **Documentation updates**
 
+- Added AGENTS.md with codebase instructions for AI coding agents
 - Added Firecrawl import to all "When to sync vs deploy" tables
 - Clarified import workflow: creates local files only, no `import:prod` needed
 - Updated docs: README, setup-guide, how-to-publish, docs page, about-this-blog

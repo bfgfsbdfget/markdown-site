@@ -35,6 +35,10 @@
   path = "/api/post"
   function = "api"
 
+[[edge_functions]]
+  path = "/api/export"
+  function = "api"
+
 # Open Graph bot detection (catches all other routes)
 [[edge_functions]]
   path = "/*"

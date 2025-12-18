@@ -4,6 +4,104 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.6.1] - 2025-12-18
+
+### Changed
+
+- Added Firecrawl import to all "When to sync vs deploy" tables in docs
+- Clarified import workflow: creates local files only, no `import:prod` needed
+- Updated README, setup-guide, how-to-publish, docs page, about-this-blog
+- Renamed `content/pages/changelog.md` to `changelog-page.md` to avoid confusion with root changelog
+
+## [1.6.0] - 2025-12-18
+
+### Added
+
+- Firecrawl content importer for external URLs
+  - New `npm run import <url>` command
+  - Scrapes URLs and converts to local markdown drafts
+  - Creates drafts in `content/blog/` with frontmatter
+  - Uses Firecrawl API (requires `FIRECRAWL_API_KEY` in `.env.local`)
+  - Then sync to dev (`npm run sync`) or prod (`npm run sync:prod`)
+  - No separate `import:prod` command needed (import creates local files only)
+- New API endpoint `/api/export` for batch content fetching
+  - Returns all posts with full markdown content
+  - Single request for LLM ingestion
+- AI plugin discovery at `/.well-known/ai-plugin.json`
+  - Standard format for AI tool integration
+- OpenAPI 3.0 specification at `/openapi.yaml`
+  - Full API documentation
+  - Describes all endpoints, parameters, and responses
+- Enhanced `llms.txt` with complete API documentation
+  - Added all new endpoints
+  - Improved quick start section
+  - Added response schema documentation
+
+### Technical
+
+- New script: `scripts/import-url.ts`
+- New package dependency: `@mendable/firecrawl-js`
+- Updated `netlify/edge-functions/api.ts` for `/api/export` proxy
+- Updated `convex/http.ts` with export endpoint
+- Created `public/.well-known/` directory
+
+## [1.5.0] - 2025-12-17
+
+### Added
+
+- Frontmatter-controlled featured items
+  - Add `featured: true` to any post or page frontmatter
+  - Use `featuredOrder` to control display order (lower = first)
+  - Featured items sync instantly with `npm run sync` (no redeploy needed)
+- New Convex queries for featured content
+  - `getFeaturedPosts`: returns posts with `featured: true`
+  - `getFeaturedPages`: returns pages with `featured: true`
+- Schema updates with `featured` and `featuredOrder` fields
+  - Added `by_featured` index for efficient queries
+
+### Changed
+
+- Home.tsx now queries featured items from Convex instead of siteConfig
+- FeaturedCards component uses Convex queries for real-time updates
+- Removed hardcoded `featuredItems` and `featuredEssays` from siteConfig
+
+### Technical
+
+- Updated sync script to parse `featured` and `featuredOrder` from frontmatter
+- Added index on `featured` field in posts and pages tables
+- Both list and card views now use frontmatter data
+
+## [1.4.0] - 2025-12-17
+
+### Added
+
+- Featured section with list/card view toggle
+  - Card view displays title and excerpt in a responsive grid
+  - Toggle button in featured header to switch between views
+  - View preference saved to localStorage
+- Logo gallery with continuous marquee scroll
+  - Clickable logos with configurable URLs
+  - CSS only animation for smooth infinite scrolling
+  - Configurable speed, position, and title
+  - Grayscale logos with color on hover
+  - Responsive sizing across breakpoints
+  - 5 sample logos included for easy customization
+- New `excerpt` field for posts and pages frontmatter
+  - Used for card view descriptions
+  - Falls back to description field for posts
+- Expanded `siteConfig` in Home.tsx
+  - `featuredViewMode`: 'list' or 'cards'
+  - `showViewToggle`: enable user toggle
+  - `logoGallery`: full configuration object
+
+### Technical
+
+- New components: `FeaturedCards.tsx`, `LogoMarquee.tsx`
+- Updated schema with optional excerpt field
+- Updated sync script to parse excerpt from frontmatter
+- CSS uses theme variables for all four themes
+- Mobile responsive grid (3 to 2 to 1 columns for cards)
+
 ## [1.3.0] - 2025-12-17
 
 ### Added

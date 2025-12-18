@@ -6,6 +6,9 @@ slug: "setup-guide"
 published: true
 tags: ["convex", "netlify", "tutorial", "deployment"]
 readTime: "8 min read"
+featured: true
+featuredOrder: 1
+excerpt: "Complete guide to fork, set up, and deploy your own markdown blog in under 10 minutes."
 ---
 
 # Fork and Deploy Your Own Markdown Blog
@@ -37,18 +40,25 @@ This guide walks you through forking [this markdown site](https://github.com/way
     - [Adding Images](#adding-images)
     - [Sync After Adding Posts](#sync-after-adding-posts)
     - [Environment Files](#environment-files)
+    - [When to Sync vs Deploy](#when-to-sync-vs-deploy)
   - [Customizing Your Blog](#customizing-your-blog)
     - [Change the Favicon](#change-the-favicon)
     - [Change the Site Logo](#change-the-site-logo)
     - [Change the Default Open Graph Image](#change-the-default-open-graph-image)
     - [Update Site Configuration](#update-site-configuration)
+    - [Featured Section](#featured-section)
+    - [Logo Gallery](#logo-gallery)
     - [Change the Default Theme](#change-the-default-theme)
     - [Change the Font](#change-the-font)
     - [Add Static Pages (Optional)](#add-static-pages-optional)
     - [Update SEO Meta Tags](#update-seo-meta-tags)
     - [Update llms.txt and robots.txt](#update-llmstxt-and-robotstxt)
+  - [Search](#search)
+    - [Using Search](#using-search)
+    - [How It Works](#how-it-works)
   - [Real-time Stats](#real-time-stats)
   - [API Endpoints](#api-endpoints)
+  - [Import External Content](#import-external-content)
   - [Troubleshooting](#troubleshooting)
     - [Posts not appearing](#posts-not-appearing)
     - [RSS/Sitemap not working](#rsssitemap-not-working)
@@ -116,10 +126,30 @@ export default defineSchema({
     published: v.boolean(),
     tags: v.array(v.string()),
     readTime: v.optional(v.string()),
-    lastSyncedAt: v.optional(v.number()),
+    image: v.optional(v.string()),
+    excerpt: v.optional(v.string()),
+    featured: v.optional(v.boolean()),
+    featuredOrder: v.optional(v.number()),
+    lastSyncedAt: v.number(),
   })
     .index("by_slug", ["slug"])
-    .index("by_published", ["published"]),
+    .index("by_published", ["published"])
+    .index("by_featured", ["featured"]),
+
+  pages: defineTable({
+    slug: v.string(),
+    title: v.string(),
+    content: v.string(),
+    published: v.boolean(),
+    order: v.optional(v.number()),
+    excerpt: v.optional(v.string()),
+    featured: v.optional(v.boolean()),
+    featuredOrder: v.optional(v.number()),
+    lastSyncedAt: v.number(),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_published", ["published"])
+    .index("by_featured", ["featured"]),
 
   viewCounts: defineTable({
     slug: v.string(),
@@ -266,16 +296,19 @@ Your markdown content here...
 
 ### Frontmatter Fields
 
-| Field         | Required | Description                   |
-| ------------- | -------- | ----------------------------- |
-| `title`       | Yes      | Post title                    |
-| `description` | Yes      | Short description for SEO     |
-| `date`        | Yes      | Publication date (YYYY-MM-DD) |
-| `slug`        | Yes      | URL path (must be unique)     |
-| `published`   | Yes      | Set to `true` to publish      |
-| `tags`        | Yes      | Array of topic tags           |
-| `readTime`    | No       | Estimated reading time        |
-| `image`       | No       | Header/Open Graph image URL   |
+| Field           | Required | Description                               |
+| --------------- | -------- | ----------------------------------------- |
+| `title`         | Yes      | Post title                                |
+| `description`   | Yes      | Short description for SEO                 |
+| `date`          | Yes      | Publication date (YYYY-MM-DD)             |
+| `slug`          | Yes      | URL path (must be unique)                 |
+| `published`     | Yes      | Set to `true` to publish                  |
+| `tags`          | Yes      | Array of topic tags                       |
+| `readTime`      | No       | Estimated reading time                    |
+| `image`         | No       | Header/Open Graph image URL               |
+| `excerpt`       | No       | Short excerpt for card view               |
+| `featured`      | No       | Set `true` to show in featured section    |
+| `featuredOrder` | No       | Order in featured section (lower = first) |
 
 ### Adding Images
 
@@ -336,6 +369,22 @@ npm run sync:prod
 
 Both files are gitignored. Each developer creates their own local environment files.
 
+### When to Sync vs Deploy
+
+| What you're changing             | Command                    | Timing               |
+| -------------------------------- | -------------------------- | -------------------- |
+| Blog posts in `content/blog/`    | `npm run sync`             | Instant (no rebuild) |
+| Pages in `content/pages/`        | `npm run sync`             | Instant (no rebuild) |
+| Featured items (via frontmatter) | `npm run sync`             | Instant (no rebuild) |
+| Import external URL              | `npm run import` then sync | Instant (no rebuild) |
+| `siteConfig` in `Home.tsx`       | Redeploy                   | Requires rebuild     |
+| Logo gallery config              | Redeploy                   | Requires rebuild     |
+| React components/styles          | Redeploy                   | Requires rebuild     |
+
+**Markdown content** syncs instantly via Convex. **Source code changes** require pushing to GitHub for Netlify to rebuild.
+
+**Featured items** can now be controlled via markdown frontmatter. Add `featured: true` and `featuredOrder: 1` to any post or page, then run `npm run sync`.
+
 ## Customizing Your Blog
 
 ### Change the Favicon
@@ -386,13 +435,113 @@ const siteConfig = {
   title: "Your Title",
   intro: "Your introduction...",
   bio: "Your bio...",
+
+  // Featured section options
+  featuredViewMode: "list", // 'list' or 'cards'
+  showViewToggle: true, // Let users switch between views
+  featuredItems: [
+    { slug: "post-slug", type: "post" },
+    { slug: "page-slug", type: "page" },
+  ],
   featuredEssays: [{ title: "Post Title", slug: "post-slug" }],
+
+  // Logo gallery (marquee scroll with clickable links)
+  logoGallery: {
+    enabled: true, // Set false to hide
+    images: [
+      { src: "/images/logos/logo1.svg", href: "https://example.com" },
+      { src: "/images/logos/logo2.svg", href: "https://another.com" },
+    ],
+    position: "above-footer", // or 'below-featured'
+    speed: 30, // Seconds for one scroll cycle
+    title: "Trusted by",
+  },
+
   links: {
-    github: "https://github.com/waynesutton/markdown-site",
-    twitter: "https://twitter.com/yourusername",
+    docs: "/setup-guide",
+    convex: "https://convex.dev",
   },
 };
 ```
+
+### Featured Section
+
+The homepage featured section shows posts and pages marked with `featured: true` in their frontmatter. It supports two display modes:
+
+1. **List view** (default): Bullet list of links
+2. **Card view**: Grid of cards showing title and excerpt
+
+**Add a post to featured section:**
+
+Add these fields to any post or page frontmatter:
+
+```yaml
+featured: true
+featuredOrder: 1
+excerpt: "A short description that appears on the card."
+```
+
+Then run `npm run sync`. The post appears in the featured section instantly. No redeploy needed.
+
+**Order featured items:**
+
+Use `featuredOrder` to control display order. Lower numbers appear first. Posts and pages are sorted together.
+
+**Toggle view mode:**
+
+Users can toggle between list and card views using the icon button next to "Get started:". To change the default view, set `featuredViewMode: "cards"` in siteConfig.
+
+### Logo Gallery
+
+The homepage includes a scrolling logo gallery with 5 sample logos. Customize or disable it in siteConfig:
+
+**Disable the gallery:**
+
+```typescript
+logoGallery: {
+  enabled: false, // Set to false to hide
+  // ...
+},
+```
+
+**Replace with your own logos:**
+
+1. Add your logo images to `public/images/logos/` (SVG recommended)
+2. Update the images array with your logos and links:
+
+```typescript
+logoGallery: {
+  enabled: true,
+  images: [
+    { src: "/images/logos/your-logo-1.svg", href: "https://example.com" },
+    { src: "/images/logos/your-logo-2.svg", href: "https://anothersite.com" },
+  ],
+  position: "above-footer",
+  speed: 30,
+  title: "Trusted by",
+},
+```
+
+Each logo object supports:
+
+- `src`: Path to the logo image (required)
+- `href`: URL to link to when clicked (optional)
+
+**Remove sample logos:**
+
+Delete the sample files from `public/images/logos/` and clear the images array, or replace them with your own.
+
+**Configuration options:**
+
+| Option     | Description                                          |
+| ---------- | ---------------------------------------------------- |
+| `enabled`  | `true` to show, `false` to hide                      |
+| `images`   | Array of logo objects with `src` and optional `href` |
+| `position` | `'above-footer'` or `'below-featured'`               |
+| `speed`    | Seconds for one scroll cycle (lower = faster)        |
+| `title`    | Text above gallery (set to `undefined` to hide)      |
+
+The gallery uses CSS animations for smooth infinite scrolling. Logos display in grayscale and colorize on hover.
 
 ### Change the Default Theme
 
@@ -464,6 +613,29 @@ Edit `index.html` to update:
 
 Edit `public/llms.txt` and `public/robots.txt` with your site information.
 
+## Search
+
+Your blog includes full text search with Command+K keyboard shortcut.
+
+### Using Search
+
+Press `Command+K` (Mac) or `Ctrl+K` (Windows/Linux) to open the search modal. You can also click the search icon in the top navigation.
+
+**Features:**
+
+- Real-time results as you type
+- Keyboard navigation with arrow keys
+- Press Enter to select, Escape to close
+- Result snippets with context around matches
+- Distinguishes between posts and pages with type badges
+- Works with all four themes
+
+### How It Works
+
+Search uses Convex full text search indexes on the posts and pages tables. The search queries both title and content fields, deduplicates results, and sorts with title matches first.
+
+Search is automatically available once you deploy. No additional configuration needed.
+
 ## Real-time Stats
 
 Your blog includes a real-time analytics page at `/stats`:
@@ -496,6 +668,40 @@ Your blog includes these API endpoints for search engines and AI:
 | `/api/posts`                   | JSON list of all posts      |
 | `/api/post?slug=xxx`           | Single post as JSON         |
 | `/api/post?slug=xxx&format=md` | Single post as raw markdown |
+| `/api/export`                  | Batch export all posts      |
+| `/.well-known/ai-plugin.json`  | AI plugin manifest          |
+| `/openapi.yaml`                | OpenAPI 3.0 specification   |
+| `/llms.txt`                    | AI agent discovery          |
+
+## Import External Content
+
+Use Firecrawl to import articles from external URLs as markdown posts:
+
+```bash
+npm run import https://example.com/article
+```
+
+**Setup:**
+
+1. Get an API key from [firecrawl.dev](https://firecrawl.dev)
+2. Add to `.env.local`:
+
+```
+FIRECRAWL_API_KEY=fc-your-api-key
+```
+
+The import script will:
+
+1. Scrape the URL and convert to markdown
+2. Create a draft post in `content/blog/` locally
+3. Extract title and description from the page
+
+**Why no `npm run import:prod`?** The import command only creates local markdown files. It does not interact with Convex directly. After importing:
+
+- Run `npm run sync` to push to development
+- Run `npm run sync:prod` to push to production
+
+Imported posts are created as drafts (`published: false`). Review, edit, set `published: true`, then sync to your target environment.
 
 ## Troubleshooting
 

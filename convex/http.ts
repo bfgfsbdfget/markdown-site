@@ -165,6 +165,51 @@ ${post.content}`;
   }),
 });
 
+// API endpoint: Export all posts with full content (batch for LLMs)
+http.route({
+  path: "/api/export",
+  method: "GET",
+  handler: httpAction(async (ctx) => {
+    const posts = await ctx.runQuery(api.posts.getAllPosts);
+
+    // Fetch full content for each post
+    const fullPosts = await Promise.all(
+      posts.map(async (post) => {
+        const fullPost = await ctx.runQuery(api.posts.getPostBySlug, {
+          slug: post.slug,
+        });
+        return {
+          title: post.title,
+          slug: post.slug,
+          description: post.description,
+          date: post.date,
+          readTime: post.readTime,
+          tags: post.tags,
+          url: `${SITE_URL}/${post.slug}`,
+          content: fullPost?.content || "",
+        };
+      }),
+    );
+
+    const response = {
+      site: SITE_NAME,
+      url: SITE_URL,
+      description: "Open source markdown blog with real-time sync.",
+      exportedAt: new Date().toISOString(),
+      totalPosts: fullPosts.length,
+      posts: fullPosts,
+    };
+
+    return new Response(JSON.stringify(response, null, 2), {
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Cache-Control": "public, max-age=300, s-maxage=600",
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
+  }),
+});
+
 // Escape HTML characters to prevent XSS
 function escapeHtml(text: string): string {
   return text

@@ -13,11 +13,15 @@ export default defineSchema({
     tags: v.array(v.string()),
     readTime: v.optional(v.string()),
     image: v.optional(v.string()), // Header/OG image URL
+    excerpt: v.optional(v.string()), // Short excerpt for card view
+    featured: v.optional(v.boolean()), // Show in featured section
+    featuredOrder: v.optional(v.number()), // Order in featured section (lower = first)
     lastSyncedAt: v.number(),
   })
     .index("by_slug", ["slug"])
     .index("by_date", ["date"])
     .index("by_published", ["published"])
+    .index("by_featured", ["featured"])
     .searchIndex("search_content", {
       searchField: "content",
       filterFields: ["published"],
@@ -34,10 +38,14 @@ export default defineSchema({
     content: v.string(),
     published: v.boolean(),
     order: v.optional(v.number()), // Display order in nav
+    excerpt: v.optional(v.string()), // Short excerpt for card view
+    featured: v.optional(v.boolean()), // Show in featured section
+    featuredOrder: v.optional(v.number()), // Order in featured section (lower = first)
     lastSyncedAt: v.number(),
   })
     .index("by_slug", ["slug"])
     .index("by_published", ["published"])
+    .index("by_featured", ["featured"])
     .searchIndex("search_content", {
       searchField: "content",
       filterFields: ["published"],

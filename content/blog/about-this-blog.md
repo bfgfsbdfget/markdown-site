@@ -6,6 +6,9 @@ slug: "about-this-blog"
 published: true
 tags: ["convex", "netlify", "open-source", "markdown"]
 readTime: "4 min read"
+featured: true
+featuredOrder: 3
+excerpt: "Learn how this open source site works with real-time sync and instant updates."
 ---
 
 # About This Markdown Site
@@ -76,6 +79,8 @@ The setup takes about 10 minutes:
 4. Deploy to Netlify
 
 **Development vs Production:** Use `npm run sync` when testing locally against your dev Convex deployment. Use `npm run sync:prod` when deploying content to your live production site.
+
+**Import external content:** Run `npm run import <url>` to scrape and create local markdown drafts. Then sync to dev or prod. There is no separate import command for production because import creates local files only.
 
 Read the [setup guide](/setup-guide) for detailed steps.
 

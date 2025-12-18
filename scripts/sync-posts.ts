@@ -30,6 +30,9 @@ interface PostFrontmatter {
   tags: string[];
   readTime?: string;
   image?: string; // Header/OG image URL
+  excerpt?: string; // Short excerpt for card view
+  featured?: boolean; // Show in featured section
+  featuredOrder?: number; // Order in featured section (lower = first)
 }
 
 interface ParsedPost {
@@ -42,6 +45,9 @@ interface ParsedPost {
   tags: string[];
   readTime?: string;
   image?: string; // Header/OG image URL
+  excerpt?: string; // Short excerpt for card view
+  featured?: boolean; // Show in featured section
+  featuredOrder?: number; // Order in featured section (lower = first)
 }
 
 // Page frontmatter (for static pages like About, Projects, Contact)
@@ -50,6 +56,9 @@ interface PageFrontmatter {
   slug: string;
   published: boolean;
   order?: number; // Display order in navigation
+  excerpt?: string; // Short excerpt for card view
+  featured?: boolean; // Show in featured section
+  featuredOrder?: number; // Order in featured section (lower = first)
 }
 
 interface ParsedPage {
@@ -58,6 +67,9 @@ interface ParsedPage {
   content: string;
   published: boolean;
   order?: number;
+  excerpt?: string; // Short excerpt for card view
+  featured?: boolean; // Show in featured section
+  featuredOrder?: number; // Order in featured section (lower = first)
 }
 
 // Calculate reading time based on word count
@@ -92,6 +104,9 @@ function parseMarkdownFile(filePath: string): ParsedPost | null {
       tags: frontmatter.tags || [],
       readTime: frontmatter.readTime || calculateReadTime(content),
       image: frontmatter.image, // Header/OG image URL
+      excerpt: frontmatter.excerpt, // Short excerpt for card view
+      featured: frontmatter.featured, // Show in featured section
+      featuredOrder: frontmatter.featuredOrder, // Order in featured section
     };
   } catch (error) {
     console.error(`Error parsing ${filePath}:`, error);
@@ -135,6 +150,9 @@ function parsePageFile(filePath: string): ParsedPage | null {
       content: content.trim(),
       published: frontmatter.published ?? true,
       order: frontmatter.order,
+      excerpt: frontmatter.excerpt, // Short excerpt for card view
+      featured: frontmatter.featured, // Show in featured section
+      featuredOrder: frontmatter.featuredOrder, // Order in featured section
     };
   } catch (error) {
     console.error(`Error parsing page ${filePath}:`, error);

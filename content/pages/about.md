@@ -3,6 +3,7 @@ title: "About"
 slug: "about"
 published: true
 order: 1
+excerpt: "A markdown site built for writers, developers, and teams who want a fast, real-time publishing workflow."
 ---
 
 This is a markdown site built for writers, developers, and teams who want a fast, real-time publishing workflow.
@@ -22,6 +23,17 @@ The backend runs on Convex, a reactive database that pushes updates to clients i
 | Styling  | CSS variables      |
 | Hosting  | Netlify            |
 | Content  | Markdown           |
+
+## Features
+
+- Four theme options (dark, light, tan, cloud)
+- Full text search with Command+K shortcut
+- Featured section with list/card view toggle and excerpts
+- Logo gallery with clickable links and marquee scroll
+- Real-time analytics at `/stats`
+- RSS feeds and sitemap for SEO
+- API endpoints for AI/LLM access
+- Copy to ChatGPT/Claude sharing
 
 ## Who this is for
 

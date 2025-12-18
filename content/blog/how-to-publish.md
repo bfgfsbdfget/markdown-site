@@ -6,6 +6,9 @@ slug: "how-to-publish"
 published: true
 tags: ["tutorial", "markdown", "cursor", "publishing"]
 readTime: "3 min read"
+featured: true
+featuredOrder: 2
+excerpt: "Quick guide to writing and publishing markdown posts with npm run sync."
 ---
 
 # How to Publish a Blog Post
@@ -38,16 +41,19 @@ readTime: "5 min read"
 ---
 ```
 
-| Field         | Required | What It Does                        |
-| ------------- | -------- | ----------------------------------- |
-| `title`       | Yes      | Displays as the post heading        |
-| `description` | Yes      | Shows in search results and sharing |
-| `date`        | Yes      | Publication date (YYYY-MM-DD)       |
-| `slug`        | Yes      | Becomes the URL path                |
-| `published`   | Yes      | Set `true` to show, `false` to hide |
-| `tags`        | Yes      | Topic labels for the post           |
-| `readTime`    | No       | Estimated reading time              |
-| `image`       | No       | Open Graph image for social sharing |
+| Field           | Required | What It Does                            |
+| --------------- | -------- | --------------------------------------- |
+| `title`         | Yes      | Displays as the post heading            |
+| `description`   | Yes      | Shows in search results and sharing     |
+| `date`          | Yes      | Publication date (YYYY-MM-DD)           |
+| `slug`          | Yes      | Becomes the URL path                    |
+| `published`     | Yes      | Set `true` to show, `false` to hide     |
+| `tags`          | Yes      | Topic labels for the post               |
+| `readTime`      | No       | Estimated reading time                  |
+| `image`         | No       | Open Graph image for social sharing     |
+| `featured`      | No       | Set `true` to show in featured section  |
+| `featuredOrder` | No       | Order in featured section (lower first) |
+| `excerpt`       | No       | Short description for card view         |
 
 ## Write Your Content
 
@@ -199,6 +205,88 @@ Your page content here...
 3. Run `npm run sync`
 
 The page will appear in the navigation. Use `order` to control the display sequence (lower numbers appear first).
+
+## Sync vs Deploy
+
+Not all changes use `npm run sync`. Here's when to sync vs redeploy:
+
+| What you're changing             | Command                    | Timing               |
+| -------------------------------- | -------------------------- | -------------------- |
+| Blog posts in `content/blog/`    | `npm run sync`             | Instant (no rebuild) |
+| Pages in `content/pages/`        | `npm run sync`             | Instant (no rebuild) |
+| Featured items (via frontmatter) | `npm run sync`             | Instant (no rebuild) |
+| Import external URL              | `npm run import` then sync | Instant (no rebuild) |
+| `siteConfig` in `Home.tsx`       | Redeploy                   | Requires rebuild     |
+| Logo gallery config              | Redeploy                   | Requires rebuild     |
+| React components/styles          | Redeploy                   | Requires rebuild     |
+
+**Markdown content** syncs instantly via Convex. **Source code changes** (like siteConfig) require pushing to GitHub so Netlify rebuilds.
+
+## Adding to Featured Section
+
+To show a post or page in the homepage featured section, add these fields to frontmatter:
+
+```yaml
+featured: true
+featuredOrder: 1
+excerpt: "A short description for the card view."
+```
+
+Then run `npm run sync`. The item appears in the featured section instantly. No redeploy needed.
+
+| Field           | Description                               |
+| --------------- | ----------------------------------------- |
+| `featured`      | Set `true` to show in featured section    |
+| `featuredOrder` | Order in featured section (lower = first) |
+| `excerpt`       | Short text shown on card view             |
+
+## Updating siteConfig
+
+To change the logo gallery or site info, edit `src/pages/Home.tsx`:
+
+```typescript
+const siteConfig = {
+  name: "Your Site Name",
+  title: "Your Tagline",
+
+  // Featured section display options
+  featuredViewMode: "cards", // 'list' or 'cards'
+  showViewToggle: true, // Let users switch between views
+
+  // Logo gallery
+  logoGallery: {
+    enabled: true,
+    images: [
+      { src: "/images/logos/logo1.svg", href: "https://example.com" },
+      { src: "/images/logos/logo2.svg", href: "https://another.com" },
+    ],
+    position: "above-footer",
+    speed: 30,
+    title: "Trusted by",
+  },
+};
+```
+
+After editing siteConfig, push to GitHub. Netlify will rebuild automatically.
+
+## Import External Content
+
+You can also import articles from external URLs using Firecrawl:
+
+```bash
+npm run import https://example.com/article
+```
+
+This creates a draft markdown file in `content/blog/` locally. It does not push to Convex directly.
+
+**After importing:**
+
+- Run `npm run sync` to push to development
+- Run `npm run sync:prod` to push to production
+
+There is no `npm run import:prod` because the import step only creates local files. The sync step handles pushing to your target environment.
+
+**Setup:** Add `FIRECRAWL_API_KEY=fc-xxx` to `.env.local`. Get a key from [firecrawl.dev](https://firecrawl.dev).
 
 ## Summary
 

@@ -2,7 +2,7 @@
 
 ## Current Status
 
-v1.3.0 ready for deployment. Build passes. TypeScript verified.
+v1.5.0 ready for deployment. Build passes. TypeScript verified.
 
 ## Completed
 
@@ -36,6 +36,10 @@ v1.3.0 ready for deployment. Build passes. TypeScript verified.
 - [x] Real-time search with Command+K shortcut
 - [x] Search modal with keyboard navigation
 - [x] Full text search indexes for posts and pages
+- [x] Featured section with list/card view toggle
+- [x] Logo gallery with continuous marquee scroll
+- [x] Frontmatter-controlled featured items (featured, featuredOrder)
+- [x] Featured items sync with npm run sync (no redeploy needed)
 
 ## Deployment Steps
 

@@ -13,6 +13,8 @@ A minimalist markdown site built with React, Convex, and Vite. Optimized for SEO
 - Fully responsive design
 - Real-time analytics at `/stats`
 - Full text search with Command+K shortcut
+- Featured section with list/card view toggle
+- Logo gallery with continuous marquee scroll
 
 ### SEO and Discovery
 
@@ -27,8 +29,17 @@ A minimalist markdown site built with React, Convex, and Vite. Optimized for SEO
 
 - `/api/posts` - JSON list of all posts for agents
 - `/api/post?slug=xxx` - Single post JSON or markdown
+- `/api/export` - Batch export all posts with full content
 - `/rss-full.xml` - Full content RSS for LLM ingestion
+- `/.well-known/ai-plugin.json` - AI plugin manifest
+- `/openapi.yaml` - OpenAPI 3.0 specification
 - Copy Page dropdown for sharing to ChatGPT, Claude
+
+### Content Import
+
+- Import external URLs as markdown posts using Firecrawl
+- Run `npm run import <url>` to scrape and create draft posts locally
+- Then sync to dev or prod with `npm run sync` or `npm run sync:prod`
 
 ## Getting Started
 
@@ -92,6 +103,7 @@ published: true
 tags: ["tag1", "tag2"]
 readTime: "5 min read"
 image: "/images/my-header.png"
+excerpt: "Short text for featured cards"
 ---
 
 Your markdown content here...
@@ -131,6 +143,85 @@ const siteConfig = {
 ```
 
 Replace `public/images/logo.svg` with your own logo file.
+
+## Featured Section
+
+Posts and pages with `featured: true` in frontmatter appear in the featured section.
+
+### Add to Featured
+
+Add these fields to any post or page frontmatter:
+
+```yaml
+featured: true
+featuredOrder: 1
+excerpt: "A short description for the card view."
+```
+
+Then run `npm run sync`. No redeploy needed.
+
+| Field | Description |
+| --- | --- |
+| `featured` | Set `true` to show in featured section |
+| `featuredOrder` | Order in featured section (lower = first) |
+| `excerpt` | Short description for card view |
+
+### Display Modes
+
+The featured section supports two display modes:
+
+- **List view** (default): Bullet list of links
+- **Card view**: Grid of cards with title and excerpt
+
+Users can toggle between views. To change the default:
+
+```typescript
+const siteConfig = {
+  featuredViewMode: "cards", // 'list' or 'cards'
+  showViewToggle: true, // Allow users to switch views
+};
+```
+
+## Logo Gallery
+
+The homepage includes a scrolling logo gallery with sample logos. Configure in `siteConfig`:
+
+### Disable the gallery
+
+```typescript
+logoGallery: {
+  enabled: false,
+  // ...
+},
+```
+
+### Replace with your own logos
+
+1. Add logo images to `public/images/logos/` (SVG recommended)
+2. Update the images array with logos and links:
+
+```typescript
+logoGallery: {
+  enabled: true,
+  images: [
+    { src: "/images/logos/your-logo-1.svg", href: "https://example.com" },
+    { src: "/images/logos/your-logo-2.svg", href: "https://anothersite.com" },
+  ],
+  position: "above-footer", // or "below-featured"
+  speed: 30, // Seconds for one scroll cycle
+  title: "Trusted by", // Set to undefined to hide
+},
+```
+
+Each logo object supports:
+- `src`: Path to the logo image (required)
+- `href`: URL to link to when clicked (optional)
+
+### Remove sample logos
+
+Delete sample files from `public/images/logos/` and replace the images array with your own logos, or set `enabled: false` to hide the gallery entirely.
+
+The gallery uses CSS animations for smooth infinite scrolling. Logos appear grayscale and colorize on hover.
 
 ### Favicon
 
@@ -244,15 +335,16 @@ markdown-site/
 
 ## Scripts Reference
 
-| Script                | Description                                  |
-| --------------------- | -------------------------------------------- |
-| `npm run dev`         | Start Vite dev server                        |
-| `npm run dev:convex`  | Start Convex dev backend                     |
-| `npm run sync`        | Sync posts to dev deployment                 |
-| `npm run sync:prod`   | Sync posts to production deployment          |
-| `npm run build`       | Build for production                         |
-| `npm run deploy`      | Sync + build (for manual deploys)            |
-| `npm run deploy:prod` | Deploy Convex functions + sync to production |
+| Script                | Description                                        |
+| --------------------- | -------------------------------------------------- |
+| `npm run dev`         | Start Vite dev server                              |
+| `npm run dev:convex`  | Start Convex dev backend                           |
+| `npm run sync`        | Sync posts to dev deployment                       |
+| `npm run sync:prod`   | Sync posts to production deployment                |
+| `npm run import`      | Import URL as local markdown draft (then sync)     |
+| `npm run build`       | Build for production                               |
+| `npm run deploy`      | Sync + build (for manual deploys)                  |
+| `npm run deploy:prod` | Deploy Convex functions + sync to production       |
 
 ## Tech Stack
 
@@ -301,16 +393,51 @@ How it works:
 
 ## API Endpoints
 
-| Endpoint                       | Description                     |
-| ------------------------------ | ------------------------------- |
-| `/stats`                       | Real-time site analytics        |
-| `/rss.xml`                     | RSS feed with post descriptions |
-| `/rss-full.xml`                | RSS feed with full post content |
-| `/sitemap.xml`                 | Dynamic XML sitemap             |
-| `/api/posts`                   | JSON list of all posts          |
-| `/api/post?slug=xxx`           | Single post as JSON             |
-| `/api/post?slug=xxx&format=md` | Single post as markdown         |
-| `/meta/post?slug=xxx`          | Open Graph HTML for crawlers    |
+| Endpoint                       | Description                          |
+| ------------------------------ | ------------------------------------ |
+| `/stats`                       | Real-time site analytics             |
+| `/rss.xml`                     | RSS feed with post descriptions      |
+| `/rss-full.xml`                | RSS feed with full post content      |
+| `/sitemap.xml`                 | Dynamic XML sitemap                  |
+| `/api/posts`                   | JSON list of all posts               |
+| `/api/post?slug=xxx`           | Single post as JSON                  |
+| `/api/post?slug=xxx&format=md` | Single post as markdown              |
+| `/api/export`                  | Batch export all posts with content  |
+| `/meta/post?slug=xxx`          | Open Graph HTML for crawlers         |
+| `/.well-known/ai-plugin.json`  | AI plugin manifest                   |
+| `/openapi.yaml`                | OpenAPI 3.0 specification            |
+| `/llms.txt`                    | AI agent discovery                   |
+
+## Import External Content
+
+Use Firecrawl to import articles from external URLs as markdown posts:
+
+```bash
+npm run import https://example.com/article
+```
+
+This will:
+
+1. Scrape the URL using Firecrawl API
+2. Convert to clean markdown
+3. Create a draft post in `content/blog/` locally
+4. Add frontmatter with title, description, and today's date
+
+**Setup:**
+
+1. Get an API key from [firecrawl.dev](https://firecrawl.dev)
+2. Add to `.env.local`:
+
+```
+FIRECRAWL_API_KEY=fc-your-api-key
+```
+
+**Why no `npm run import:prod`?** The import command only creates local markdown files. It does not interact with Convex. After importing, sync to your target environment:
+
+- `npm run sync` for development
+- `npm run sync:prod` for production
+
+Imported posts are created as drafts (`published: false`). Review, edit, set `published: true`, then sync.
 
 ## How Blog Post Slugs Work
 

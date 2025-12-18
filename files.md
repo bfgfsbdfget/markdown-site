@@ -12,6 +12,7 @@ A brief description of each file in the codebase.
 | `index.html`     | Main HTML entry with SEO meta tags and JSON-LD |
 | `netlify.toml`   | Netlify deployment and Convex HTTP redirects   |
 | `README.md`      | Project documentation                          |
+| `AGENTS.md`      | AI coding agent instructions (agents.md spec)  |
 | `files.md`       | This file - codebase structure                 |
 | `changelog.md`   | Version history and changes                    |
 | `TASK.md`        | Task tracking and project status               |
@@ -30,7 +31,7 @@ A brief description of each file in the codebase.
 
 | File        | Description                                             |
 | ----------- | ------------------------------------------------------- |
-| `Home.tsx`  | Landing page with intro, featured essays, and post list |
+| `Home.tsx`  | Landing page with siteConfig, featured section, logo gallery |
 | `Post.tsx`  | Individual blog post view with JSON-LD injection        |
 | `Stats.tsx` | Real-time analytics dashboard with visitor stats        |
 
@@ -44,6 +45,8 @@ A brief description of each file in the codebase.
 | `BlogPost.tsx`         | Markdown renderer with syntax highlighting                 |
 | `CopyPageDropdown.tsx` | Share dropdown for LLMs (ChatGPT, Claude)                  |
 | `SearchModal.tsx`      | Full text search modal with keyboard navigation            |
+| `FeaturedCards.tsx`    | Card grid for featured posts/pages with excerpts           |
+| `LogoMarquee.tsx`      | Scrolling logo gallery with clickable links                |
 
 ### Context (`src/context/`)
 
@@ -80,65 +83,83 @@ A brief description of each file in the codebase.
 
 ### HTTP Endpoints (defined in `http.ts`)
 
-| Route           | Description                            |
-| --------------- | -------------------------------------- |
-| `/stats`        | Real-time site analytics page          |
-| `/rss.xml`      | RSS feed with descriptions             |
-| `/rss-full.xml` | RSS feed with full content for LLMs    |
-| `/sitemap.xml`  | Dynamic XML sitemap for search engines |
-| `/api/posts`    | JSON list of all posts                 |
-| `/api/post`     | Single post as JSON or markdown        |
-| `/meta/post`    | Open Graph HTML for social crawlers    |
+| Route                      | Description                            |
+| -------------------------- | -------------------------------------- |
+| `/stats`                   | Real-time site analytics page          |
+| `/rss.xml`                 | RSS feed with descriptions             |
+| `/rss-full.xml`            | RSS feed with full content for LLMs    |
+| `/sitemap.xml`             | Dynamic XML sitemap for search engines |
+| `/api/posts`               | JSON list of all posts                 |
+| `/api/post`                | Single post as JSON or markdown        |
+| `/api/export`              | Batch export all posts with content    |
+| `/meta/post`               | Open Graph HTML for social crawlers    |
+| `/.well-known/ai-plugin.json` | AI plugin manifest                  |
+| `/openapi.yaml`            | OpenAPI 3.0 specification              |
+| `/llms.txt`                | AI agent discovery                     |
 
 ## Content (`content/blog/`)
 
 Markdown files with frontmatter for blog posts. Each file becomes a blog post.
 
-| Field         | Description                            |
-| ------------- | -------------------------------------- |
-| `title`       | Post title                             |
-| `description` | Short description for SEO              |
-| `date`        | Publication date (YYYY-MM-DD)          |
-| `slug`        | URL path for the post                  |
-| `published`   | Whether post is public                 |
-| `tags`        | Array of topic tags                    |
-| `readTime`    | Estimated reading time                 |
-| `image`       | Header/Open Graph image URL (optional) |
+| Field           | Description                                 |
+| --------------- | ------------------------------------------- |
+| `title`         | Post title                                  |
+| `description`   | Short description for SEO                   |
+| `date`          | Publication date (YYYY-MM-DD)               |
+| `slug`          | URL path for the post                       |
+| `published`     | Whether post is public                      |
+| `tags`          | Array of topic tags                         |
+| `readTime`      | Estimated reading time                      |
+| `image`         | Header/Open Graph image URL (optional)      |
+| `excerpt`       | Short excerpt for card view (optional)      |
+| `featured`      | Show in featured section (optional)         |
+| `featuredOrder` | Order in featured section (optional)        |
 
 ## Static Pages (`content/pages/`)
 
-Markdown files for static pages like About, Projects, Contact.
+Markdown files for static pages like About, Projects, Contact, Changelog.
 
-| Field       | Description                               |
-| ----------- | ----------------------------------------- |
-| `title`     | Page title                                |
-| `slug`      | URL path for the page                     |
-| `published` | Whether page is public                    |
-| `order`     | Display order in navigation (lower first) |
+| Field           | Description                               |
+| --------------- | ----------------------------------------- |
+| `title`         | Page title                                |
+| `slug`          | URL path for the page                     |
+| `published`     | Whether page is public                    |
+| `order`         | Display order in navigation (lower first) |
+| `excerpt`       | Short excerpt for card view (optional)    |
+| `featured`      | Show in featured section (optional)       |
+| `featuredOrder` | Order in featured section (optional)      |
 
 ## Scripts (`scripts/`)
 
-| File            | Description                                  |
-| --------------- | -------------------------------------------- |
-| `sync-posts.ts` | Syncs markdown files to Convex at build time |
+| File            | Description                                       |
+| --------------- | ------------------------------------------------- |
+| `sync-posts.ts` | Syncs markdown files to Convex at build time      |
+| `import-url.ts` | Imports external URLs as markdown posts (Firecrawl) |
 
 ## Netlify (`netlify/edge-functions/`)
 
-| File         | Description                                           |
-| ------------ | ----------------------------------------------------- |
-| `botMeta.ts` | Edge function for social media crawler detection      |
-| `rss.ts`     | Proxies `/rss.xml` and `/rss-full.xml` to Convex HTTP |
-| `sitemap.ts` | Proxies `/sitemap.xml` to Convex HTTP                 |
-| `api.ts`     | Proxies `/api/posts` and `/api/post` to Convex HTTP   |
+| File         | Description                                                  |
+| ------------ | ------------------------------------------------------------ |
+| `botMeta.ts` | Edge function for social media crawler detection             |
+| `rss.ts`     | Proxies `/rss.xml` and `/rss-full.xml` to Convex HTTP        |
+| `sitemap.ts` | Proxies `/sitemap.xml` to Convex HTTP                        |
+| `api.ts`     | Proxies `/api/posts`, `/api/post`, `/api/export` to Convex   |
 
 ## Public Assets (`public/`)
 
-| File          | Description                                    |
-| ------------- | ---------------------------------------------- |
-| `favicon.svg` | Site favicon                                   |
-| `_redirects`  | SPA redirect rules for static files            |
-| `robots.txt`  | Crawler rules for search engines and AI bots   |
-| `llms.txt`    | AI agent discovery file (llmstxt.org standard) |
+| File           | Description                                    |
+| -------------- | ---------------------------------------------- |
+| `favicon.svg`  | Site favicon                                   |
+| `_redirects`   | SPA redirect rules for static files            |
+| `robots.txt`   | Crawler rules for search engines and AI bots   |
+| `llms.txt`     | AI agent discovery file (llmstxt.org standard) |
+| `openapi.yaml` | OpenAPI 3.0 specification for API endpoints    |
+
+### AI Plugin (`public/.well-known/`)
+
+| File              | Description                          |
+| ----------------- | ------------------------------------ |
+| `ai-plugin.json`  | AI plugin manifest for tool integration |
 
 ### Images (`public/images/`)
 
@@ -148,11 +169,25 @@ Markdown files for static pages like About, Projects, Contact.
 | `og-default.svg` | Default Open Graph image for social sharing  |
 | `*.png/jpg/svg`  | Blog post images (referenced in frontmatter) |
 
+### Logo Gallery (`public/images/logos/`)
+
+| File                 | Description                              |
+| -------------------- | ---------------------------------------- |
+| `sample-logo-1.svg`  | Sample logo (replace with your own)      |
+| `sample-logo-2.svg`  | Sample logo (replace with your own)      |
+| `sample-logo-3.svg`  | Sample logo (replace with your own)      |
+| `sample-logo-4.svg`  | Sample logo (replace with your own)      |
+| `sample-logo-5.svg`  | Sample logo (replace with your own)      |
+
 ## Cursor Rules (`.cursor/rules/`)
 
-| File            | Description                               |
-| --------------- | ----------------------------------------- |
-| `sec-check.mdc` | Security guidelines and audit checklist   |
-| `dev2.mdc`      | Development guidelines and best practices |
-| `help.mdc`      | Core development guidelines               |
-| `convex2.mdc`   | Convex-specific guidelines and examples   |
+| File                       | Description                                      |
+| -------------------------- | ------------------------------------------------ |
+| `convex-write-conflicts.mdc` | Write conflict prevention patterns for Convex  |
+| `convex2.mdc`              | Convex function syntax and examples              |
+| `dev2.mdc`                 | Development guidelines and best practices        |
+| `help.mdc`                 | Core development guidelines                      |
+| `rulesforconvex.mdc`       | Convex schema and function best practices        |
+| `sec-check.mdc`            | Security guidelines and audit checklist          |
+| `task.mdc`                 | Task list management guidelines                  |
+| `write.mdc`                | Writing style guide (activate with @write)       |

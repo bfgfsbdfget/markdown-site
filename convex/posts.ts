@@ -16,6 +16,9 @@ export const getAllPosts = query({
       tags: v.array(v.string()),
       readTime: v.optional(v.string()),
       image: v.optional(v.string()),
+      excerpt: v.optional(v.string()),
+      featured: v.optional(v.boolean()),
+      featuredOrder: v.optional(v.number()),
     }),
   ),
   handler: async (ctx) => {
@@ -41,6 +44,48 @@ export const getAllPosts = query({
       tags: post.tags,
       readTime: post.readTime,
       image: post.image,
+      excerpt: post.excerpt,
+      featured: post.featured,
+      featuredOrder: post.featuredOrder,
+    }));
+  },
+});
+
+// Get featured posts for the homepage featured section
+export const getFeaturedPosts = query({
+  args: {},
+  returns: v.array(
+    v.object({
+      _id: v.id("posts"),
+      slug: v.string(),
+      title: v.string(),
+      excerpt: v.optional(v.string()),
+      description: v.string(),
+      featuredOrder: v.optional(v.number()),
+    }),
+  ),
+  handler: async (ctx) => {
+    const posts = await ctx.db
+      .query("posts")
+      .withIndex("by_featured", (q) => q.eq("featured", true))
+      .collect();
+
+    // Filter to only published posts and sort by featuredOrder
+    const featuredPosts = posts
+      .filter((p) => p.published)
+      .sort((a, b) => {
+        const orderA = a.featuredOrder ?? 999;
+        const orderB = b.featuredOrder ?? 999;
+        return orderA - orderB;
+      });
+
+    return featuredPosts.map((post) => ({
+      _id: post._id,
+      slug: post.slug,
+      title: post.title,
+      excerpt: post.excerpt,
+      description: post.description,
+      featuredOrder: post.featuredOrder,
     }));
   },
 });
@@ -63,6 +108,9 @@ export const getPostBySlug = query({
       tags: v.array(v.string()),
       readTime: v.optional(v.string()),
       image: v.optional(v.string()),
+      excerpt: v.optional(v.string()),
+      featured: v.optional(v.boolean()),
+      featuredOrder: v.optional(v.number()),
     }),
     v.null(),
   ),
@@ -88,6 +136,9 @@ export const getPostBySlug = query({
       tags: post.tags,
       readTime: post.readTime,
       image: post.image,
+      excerpt: post.excerpt,
+      featured: post.featured,
+      featuredOrder: post.featuredOrder,
     };
   },
 });
@@ -106,6 +157,9 @@ export const syncPosts = internalMutation({
         tags: v.array(v.string()),
         readTime: v.optional(v.string()),
         image: v.optional(v.string()),
+        excerpt: v.optional(v.string()),
+        featured: v.optional(v.boolean()),
+        featuredOrder: v.optional(v.number()),
       }),
     ),
   },
@@ -141,6 +195,9 @@ export const syncPosts = internalMutation({
           tags: post.tags,
           readTime: post.readTime,
           image: post.image,
+          excerpt: post.excerpt,
+          featured: post.featured,
+          featuredOrder: post.featuredOrder,
           lastSyncedAt: now,
         });
         updated++;
@@ -180,6 +237,9 @@ export const syncPostsPublic = mutation({
         tags: v.array(v.string()),
         readTime: v.optional(v.string()),
         image: v.optional(v.string()),
+        excerpt: v.optional(v.string()),
+        featured: v.optional(v.boolean()),
+        featuredOrder: v.optional(v.number()),
       }),
     ),
   },
@@ -215,6 +275,9 @@ export const syncPostsPublic = mutation({
           tags: post.tags,
           readTime: post.readTime,
           image: post.image,
+          excerpt: post.excerpt,
+          featured: post.featured,
+          featuredOrder: post.featuredOrder,
           lastSyncedAt: now,
         });
         updated++;

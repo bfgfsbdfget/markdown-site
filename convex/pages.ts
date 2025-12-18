@@ -11,6 +11,9 @@ export const getAllPages = query({
       title: v.string(),
       published: v.boolean(),
       order: v.optional(v.number()),
+      excerpt: v.optional(v.string()),
+      featured: v.optional(v.boolean()),
+      featuredOrder: v.optional(v.number()),
     }),
   ),
   handler: async (ctx) => {
@@ -33,6 +36,46 @@ export const getAllPages = query({
       title: page.title,
       published: page.published,
       order: page.order,
+      excerpt: page.excerpt,
+      featured: page.featured,
+      featuredOrder: page.featuredOrder,
+    }));
+  },
+});
+
+// Get featured pages for the homepage featured section
+export const getFeaturedPages = query({
+  args: {},
+  returns: v.array(
+    v.object({
+      _id: v.id("pages"),
+      slug: v.string(),
+      title: v.string(),
+      excerpt: v.optional(v.string()),
+      featuredOrder: v.optional(v.number()),
+    }),
+  ),
+  handler: async (ctx) => {
+    const pages = await ctx.db
+      .query("pages")
+      .withIndex("by_featured", (q) => q.eq("featured", true))
+      .collect();
+
+    // Filter to only published pages and sort by featuredOrder
+    const featuredPages = pages
+      .filter((p) => p.published)
+      .sort((a, b) => {
+        const orderA = a.featuredOrder ?? 999;
+        const orderB = b.featuredOrder ?? 999;
+        return orderA - orderB;
+      });
+
+    return featuredPages.map((page) => ({
+      _id: page._id,
+      slug: page.slug,
+      title: page.title,
+      excerpt: page.excerpt,
+      featuredOrder: page.featuredOrder,
     }));
   },
 });
@@ -50,6 +93,9 @@ export const getPageBySlug = query({
       content: v.string(),
       published: v.boolean(),
       order: v.optional(v.number()),
+      excerpt: v.optional(v.string()),
+      featured: v.optional(v.boolean()),
+      featuredOrder: v.optional(v.number()),
     }),
     v.null(),
   ),
@@ -70,6 +116,9 @@ export const getPageBySlug = query({
       content: page.content,
       published: page.published,
       order: page.order,
+      excerpt: page.excerpt,
+      featured: page.featured,
+      featuredOrder: page.featuredOrder,
     };
   },
 });
@@ -84,6 +133,9 @@ export const syncPagesPublic = mutation({
         content: v.string(),
         published: v.boolean(),
         order: v.optional(v.number()),
+        excerpt: v.optional(v.string()),
+        featured: v.optional(v.boolean()),
+        featuredOrder: v.optional(v.number()),
       }),
     ),
   },
@@ -115,6 +167,9 @@ export const syncPagesPublic = mutation({
           content: page.content,
           published: page.published,
           order: page.order,
+          excerpt: page.excerpt,
+          featured: page.featured,
+          featuredOrder: page.featuredOrder,
           lastSyncedAt: now,
         });
         updated++;

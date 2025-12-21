@@ -2333,7 +2333,7 @@ body {
 }
 
 .logo-marquee-image {
-  height: 32px;
+  height: 56px;
   width: auto;
   max-width: 120px;
   object-fit: contain;

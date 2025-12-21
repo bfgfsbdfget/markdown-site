@@ -1,7 +1,7 @@
 ---
 title: "Writing Markdown with Code Examples"
 description: "A sample post showing how to write markdown with syntax-highlighted code blocks, tables, and more."
-date: "2025-01-17"
+date: "2025-12-14"
 slug: "markdown-with-code-examples"
 published: true
 tags: ["markdown", "tutorial", "code"]

@@ -1,7 +1,7 @@
 ---
 title: "How to Publish a Blog Post"
 description: "A quick guide to writing and publishing markdown posts using Cursor after your framework is set up."
-date: "2025-01-17"
+date: "2025-12-14"
 slug: "how-to-publish"
 published: true
 tags: ["tutorial", "markdown", "cursor", "publishing"]
@@ -18,9 +18,38 @@ excerpt: "Quick guide to writing and publishing markdown posts with npm run sync
 
 Your blog is set up. Now you want to publish. This guide walks through writing a markdown post and syncing it to your live site using Cursor.
 
+## Use the Write Page
+
+Before creating files manually, try the built-in writing tool at [/write](/write). This page is not linked in navigation. Access it directly by typing the URL.
+
+The Write page has three columns:
+
+| Column        | Purpose                                                                |
+| ------------- | ---------------------------------------------------------------------- |
+| Left sidebar  | Content type selector (Blog Post/Page), Clear, Theme, and Font buttons |
+| Center        | Full-height writing area with Copy All button                          |
+| Right sidebar | Frontmatter field reference with copy buttons for each field           |
+
+Features:
+
+- **Font switcher**: Toggle between Serif and Sans fonts
+- **Theme toggle**: Matches the rest of the site (dark, light, tan, cloud)
+- **localStorage persistence**: Content saves automatically as you type
+- **Stats bar**: Word count, line count, and character count
+- **Frontmatter reference**: See all available fields with examples and copy them individually
+
+The Write page does not connect to Convex. It stores content in your browser only. When you finish writing:
+
+1. Click **Copy All** to copy the full markdown
+2. Create a new file in `content/blog/` or `content/pages/`
+3. Paste the content
+4. Run `npm run sync`
+
+This workflow works well for drafting posts before committing them to your repo.
+
 ## Create a New Post
 
-In Cursor, create a new file in `content/blog/`:
+In Cursor or your favorite IDE, create a new file in `content/blog/`:
 
 ```
 content/blog/my-new-post.md

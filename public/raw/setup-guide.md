@@ -4,7 +4,7 @@
 
 ---
 Type: post
-Date: 2025-01-14
+Date: 2025-12-14
 Reading time: 8 min read
 Tags: convex, netlify, tutorial, deployment
 ---
@@ -40,6 +40,9 @@ This guide walks you through forking [this markdown framework](https://github.co
     - [Environment Files](#environment-files)
     - [When to Sync vs Deploy](#when-to-sync-vs-deploy)
   - [Customizing Your Framework](#customizing-your-framework)
+    - [Fork Configuration Options](#fork-configuration-options)
+      - [Option 1: Automated (Recommended)](#option-1-automated-recommended)
+      - [Option 2: Manual](#option-2-manual)
     - [Files to Update When Forking](#files-to-update-when-forking)
     - [Site title and description metadata](#site-title-and-description-metadata)
     - [Update Backend Configuration](#update-backend-configuration)

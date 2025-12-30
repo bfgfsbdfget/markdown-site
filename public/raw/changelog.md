@@ -8,6 +8,41 @@ Date: 2025-12-30
 All notable changes to this project.
 ![](https://img.shields.io/badge/License-MIT-yellow.svg)
 
+## v1.47.0
+
+Released December 29, 2025
+
+**Image lightbox for blog posts and pages**
+
+- Images automatically open in full-screen lightbox when clicked (if enabled)
+- Lightbox includes dark backdrop, close button (X icon), and caption display
+- Keyboard support: Press Escape to close lightbox
+- Click outside image (backdrop) to close
+- Alt text displayed as caption below image in lightbox
+- Images show pointer cursor (`zoom-in`) and subtle hover effect when lightbox is enabled
+- Configurable via `siteConfig.imageLightbox.enabled` (default: `true`)
+- Dashboard config generator includes image lightbox toggle
+- Responsive design: lightbox adapts to mobile screens
+
+**Configuration:**
+
+```typescript
+// src/config/siteConfig.ts
+imageLightbox: {
+  enabled: true, // Set to false to disable image lightbox
+},
+```
+
+**Technical details:**
+
+- New `ImageLightbox` component in `BlogPost.tsx` with backdrop, close button, and keyboard handlers
+- Lightbox state management using React hooks (`useState`, `useEffect`)
+- CSS styles for lightbox backdrop, image container, close button, and caption
+- Prevents body scrolling when lightbox is open
+- Smooth fade-in animation for lightbox appearance
+
+Updated files: `src/components/BlogPost.tsx`, `src/config/siteConfig.ts`, `src/styles/global.css`, `src/pages/Dashboard.tsx`, `content/pages/docs.md`, `content/blog/setup-guide.md`
+
 ## v1.46.0
 
 Released December 29, 2025

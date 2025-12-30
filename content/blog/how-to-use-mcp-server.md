@@ -6,6 +6,7 @@ slug: "how-to-use-mcp-server"
 image: /images/mcp-blog.png
 published: true
 blogFeatured: true
+layout: "sidebar"
 tags: ["mcp", "cursor", "ai", "tutorial", "netlify"]
 ---
 

@@ -64,6 +64,7 @@ Before starting, make sure you have:
 During the AuthKit setup wizard, you'll reach step 4: **"Add default redirect endpoint URI"**
 
 Enter this for local development:
+
 ```
 http://localhost:5173/callback
 ```
@@ -108,10 +109,10 @@ npm install @workos-inc/authkit-react @convex-dev/workos
 
 **What these packages do:**
 
-| Package | Purpose |
-|---------|---------|
+| Package                     | Purpose                                    |
+| --------------------------- | ------------------------------------------ |
 | `@workos-inc/authkit-react` | WorkOS React SDK for handling login/logout |
-| `@convex-dev/workos` | Bridges WorkOS auth with Convex backend |
+| `@convex-dev/workos`        | Bridges WorkOS auth with Convex backend    |
 
 ## Step 4: Add environment variables
 
@@ -205,6 +206,7 @@ When `requireAuth` is `true` and WorkOS is configured, the dashboard requires lo
 ## Step 7: Test locally
 
 1. Start your development server:
+
    ```bash
    npm run dev
    ```
@@ -271,21 +273,25 @@ When WorkOS is not configured or `requireAuth: false`:
 ## Troubleshooting
 
 **Dashboard shows "Authentication Required" message:**
+
 - Verify `VITE_WORKOS_CLIENT_ID` and `VITE_WORKOS_REDIRECT_URI` are set in `.env.local`
 - Check that `WORKOS_CLIENT_ID` is set in Convex environment variables
 - Ensure `requireAuth: true` in `siteConfig.ts`
 
 **Login redirect not working:**
+
 - Verify redirect URI matches exactly in WorkOS Dashboard
 - Check CORS settings include your domain
 - Ensure callback route is configured in `App.tsx`
 
 **"WorkOS is not configured" message:**
+
 - Check that both `VITE_WORKOS_CLIENT_ID` and `VITE_WORKOS_REDIRECT_URI` are set
 - Verify environment variables are loaded (check browser console)
 - Restart development server after adding environment variables
 
 **Convex auth errors:**
+
 - Verify `WORKOS_CLIENT_ID` is set in Convex environment variables
 - Check that `convex/auth.config.ts` exists and is correct
 - Ensure Convex functions are deployed (`npx convex deploy`)

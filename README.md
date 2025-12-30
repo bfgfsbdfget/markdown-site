@@ -533,6 +533,7 @@ A public markdown writing page at `/write` (not linked in navigation).
 Access directly at `yourdomain.com/write`. Content is stored in localStorage only (not synced to database). Use it to draft posts, then copy the content to a markdown file in `content/blog/` or `content/pages/` and run `npm run sync`.
 
 **Features:**
+
 - Three-column Cursor docs-style layout
 - Content type selector (Blog Post or Page) with dynamic frontmatter templates
 - Frontmatter field reference with individual copy buttons

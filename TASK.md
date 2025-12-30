@@ -7,9 +7,21 @@
 
 ## Current Status
 
-v1.46.0 ready. Dashboard sync server feature complete. Local HTTP server allows executing sync commands directly from dashboard UI without opening terminal. Real-time output streaming, server status indicators, and copy/execute buttons implemented. Header sync buttons use sync server when available. Copy icons added for npm run sync-server command.
+v1.47.0 ready. Image lightbox feature complete. Images in blog posts and pages automatically open in full-screen lightbox when clicked (if enabled in siteConfig). Lightbox includes backdrop, close button, keyboard support (Escape), and caption display. Configurable via siteConfig.imageLightbox.enabled (default: true). Dashboard config generator includes image lightbox toggle. Documentation updated in docs.md and setup-guide.md.
 
 ## Completed
+
+- [x] Image lightbox for blog posts and pages
+  - [x] Added ImageLightboxConfig interface to siteConfig.ts with enabled option
+  - [x] Created ImageLightbox component in BlogPost.tsx with backdrop, close button, keyboard support
+  - [x] Updated img renderer to add click handler and clickable cursor when lightbox enabled
+  - [x] Added CSS styles for lightbox backdrop, image, close button, and caption
+  - [x] Added imageLightboxEnabled to Dashboard config generator
+  - [x] Updated documentation: docs.md, setup-guide.md, files.md, changelog.md, changelog-page.md
+  - [x] Images show pointer cursor and hover effect when lightbox is enabled
+  - [x] Lightbox closes on backdrop click, Escape key, or close button
+  - [x] Alt text displayed as caption in lightbox
+  - [x] Default configuration: enabled: true (lightbox active by default)
 
 - [x] Stats page configuration option for public/private access
   - [x] Added StatsPageConfig interface to siteConfig.ts with enabled and showInNav options

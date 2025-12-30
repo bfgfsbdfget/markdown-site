@@ -389,6 +389,10 @@ This image appears when sharing on social media. Recommended: 1200x630 pixels.
 ![Alt text description](/images/screenshot.png)
 ```
 
+Inline images appear in the post content. Alt text is used as the caption below the image.
+
+**Image lightbox:** By default, images in blog posts and pages open in a full-screen lightbox when clicked. This allows readers to view images at full size. The lightbox can be closed by clicking outside the image, pressing Escape, or clicking the close button. To disable this feature, set `imageLightbox.enabled: false` in `src/config/siteConfig.ts`.
+
 **External Images:**
 
 ```markdown
@@ -1078,6 +1082,8 @@ Pages appear automatically in the navigation when published.
 **Right sidebar:** When enabled in `siteConfig.rightSidebar.enabled`, posts and pages can display a right sidebar containing the CopyPageDropdown at 1135px+ viewport width. Add `rightSidebar: true` to frontmatter to enable. Without this field, pages render normally with CopyPageDropdown in the nav bar. When enabled, CopyPageDropdown moves from the navigation bar to the right sidebar on wide screens. The right sidebar is hidden below 1135px, and CopyPageDropdown returns to the nav bar automatically.
 
 **Show image at top:** Add `showImageAtTop: true` to display the `image` field at the top of the post/page above the header. Default behavior: if `showImageAtTop` is not set or `false`, image only used for Open Graph previews and featured card thumbnails.
+
+**Image lightbox:** Images in blog posts and pages automatically open in a full-screen lightbox when clicked (if enabled in `siteConfig.imageLightbox.enabled`). This allows readers to view images at full size. The lightbox can be closed by clicking outside the image, pressing Escape, or clicking the close button. To disable this feature, set `imageLightbox.enabled: false` in `src/config/siteConfig.ts`.
 
 **Footer:** Footer content can be set in frontmatter (`footer` field) or use `siteConfig.footer.defaultContent`. Control visibility globally via `siteConfig.footer.enabled` and per-page via `showFooter: true/false` frontmatter.
 

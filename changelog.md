@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.47.0] - 2025-12-29
+
+### Added
+
+- Image lightbox for blog posts and pages
+  - Images automatically open in full-screen lightbox when clicked (if enabled)
+  - Lightbox includes dark backdrop, close button (X icon), and caption display
+  - Keyboard support: Press Escape to close lightbox
+  - Click outside image (backdrop) to close
+  - Alt text displayed as caption below image in lightbox
+  - Images show pointer cursor (`zoom-in`) and subtle hover effect when lightbox is enabled
+  - Configurable via `siteConfig.imageLightbox.enabled` (default: `true`)
+  - Dashboard config generator includes image lightbox toggle
+  - Responsive design: lightbox adapts to mobile screens
+
+### Technical
+
+- New component: `ImageLightbox` in `src/components/BlogPost.tsx`
+- New interface: `ImageLightboxConfig` in `src/config/siteConfig.ts`
+- Updated: `src/components/BlogPost.tsx` - Added lightbox state management and click handlers
+- Updated: `src/styles/global.css` - Added lightbox styles (`.image-lightbox-backdrop`, `.image-lightbox-img`, `.image-lightbox-close`, `.image-lightbox-caption`)
+- Updated: `src/pages/Dashboard.tsx` - Added image lightbox configuration option
+- Updated: `content/pages/docs.md` - Added image lightbox documentation
+- Updated: `content/blog/setup-guide.md` - Added image lightbox documentation
+
 ## [1.46.0] - 2025-12-29
 
 ### Added

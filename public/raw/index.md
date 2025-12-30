@@ -2,18 +2,16 @@
 
 This is the homepage index of all published content.
 
-## Blog Posts (17)
+## Blog Posts (16)
 
 - **[How to setup WorkOS](/raw/how-to-setup-workos.md)** - Step-by-step guide to configure WorkOS AuthKit authentication for your markdown blog dashboard. WorkOS is optional and can be enabled in siteConfig.ts.
   - Date: 2025-12-29 | Reading time: 10 min read | Tags: workos, authentication, tutorial, dashboard
 - **[How to use the Markdown sync dashboard](/raw/how-to-use-the-markdown-sync-dashboard.md)** - Learn how to use the dashboard at /dashboard to manage content, configure your site, and sync markdown files without leaving your browser.
   - Date: 2025-12-29 | Reading time: 8 min read | Tags: dashboard, tutorial, content-management
-- **[Team Workflows with Git Version Control](/raw/team-workflows-git-version-control.md)** - How teams collaborate on markdown content using git, sync to shared Convex deployments, and automate production syncs with CI/CD.
-  - Date: 2025-12-29 | Reading time: 6 min read | Tags: git, convex, ci-cd, collaboration, workflow
 - **[How to Use the MCP Server with MarkDown Sync](/raw/how-to-use-mcp-server.md)** - Guide to using the HTTP-based Model Context Protocol(MCP) server at www.markdown.fast/mcp with Cursor and other AI tools
   - Date: 2025-12-28 | Reading time: 5 min read | Tags: mcp, cursor, ai, tutorial, netlify
 - **[How to use AgentMail with Markdown Sync](/raw/how-to-use-agentmail.md)** - Complete guide to setting up AgentMail for newsletters and contact forms in your markdown blog
-  - Date: 2025-12-27 | Reading time: 5 min read | Tags: agentmail, newsletter, email, setup
+  - Date: 2025-12-27 | Reading time: 6 min read | Tags: agentmail, newsletter, email, setup
 - **[How to use Firecrawl](/raw/how-to-use-firecrawl.md)** - Import external articles as markdown posts using Firecrawl. Get your API key and configure environment variables for local imports and AI chat.
   - Date: 2025-12-26 | Reading time: 2 min read | Tags: tutorial, firecrawl, import
 - **[Happy holidays and thank you](/raw/happy-holidays-2025.md)** - A quick note of thanks for stars, forks, and feedback. More AI-first publishing features coming in 2026.
@@ -51,6 +49,6 @@ This is the homepage index of all published content.
 
 ---
 
-**Total Content:** 17 posts, 7 pages
+**Total Content:** 16 posts, 7 pages
 
 All content is available as raw markdown files at `/raw/{slug}.md`

@@ -8,6 +8,7 @@ tags: ["git", "convex", "ci-cd", "collaboration", "workflow"]
 readTime: "6 min read"
 image: /images/team-sync.png
 featured: false
+layout: "sidebar"
 newsletter: true
 
 layout: "sidebar"

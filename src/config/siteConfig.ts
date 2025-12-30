@@ -197,6 +197,12 @@ export interface DashboardConfig {
   requireAuth: boolean; // Require WorkOS authentication (only works if WorkOS is configured)
 }
 
+// Image lightbox configuration
+// Enables click-to-magnify functionality for images in blog posts and pages
+export interface ImageLightboxConfig {
+  enabled: boolean; // Global toggle for image lightbox feature
+}
+
 // Social link configuration for social footer
 export interface SocialLink {
   platform:
@@ -313,6 +319,9 @@ export interface SiteConfig {
 
   // Dashboard configuration (optional)
   dashboard?: DashboardConfig;
+
+  // Image lightbox configuration (optional)
+  imageLightbox?: ImageLightboxConfig;
 }
 
 // Default site configuration
@@ -372,6 +381,10 @@ export const siteConfig: SiteConfig = {
       {
         src: "/images/logos/mcp.svg",
         href: "https://www.markdown.fast/how-to-use-mcp-server/",
+      },
+      {
+        src: "/images/logos/workos.svg",
+        href: "https://www.markdown.fast/how-to-setup-workos",
       },
     ],
     position: "above-footer",
@@ -620,10 +633,16 @@ Created by [Wayne](https://x.com/waynesutton) with Convex, Cursor, and Claude Op
   // WorkOS authentication is optional - if not configured, dashboard is open access
   // Set enabled: false to disable the dashboard entirely
   // WARNING: When requireAuth is false, anyone can access the dashboard
-  // For production, set up WorkOS and change requireAuth to true
   dashboard: {
-    enabled: true, // Global toggle for dashboard page
-    requireAuth: true, // Set to true and configure WorkOS for secure authentication
+    enabled: true,
+    requireAuth: false,
+  },
+
+  // Image lightbox configuration
+  // Enables click-to-magnify functionality for images in blog posts and pages
+  // Images open in a full-screen lightbox overlay when clicked
+  imageLightbox: {
+    enabled: true, // Set to false to disable image lightbox
   },
 };
 

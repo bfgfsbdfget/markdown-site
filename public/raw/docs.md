@@ -171,6 +171,8 @@ Content here...
 
 **Show image at top:** Add `showImageAtTop: true` to display the `image` field at the top of the post/page above the header. Default behavior: if `showImageAtTop` is not set or `false`, image only used for Open Graph previews and featured card thumbnails.
 
+**Image lightbox:** Images in blog posts and pages automatically open in a full-screen lightbox when clicked (if enabled in `siteConfig.imageLightbox.enabled`). This allows readers to view images at full size. The lightbox can be closed by clicking outside the image, pressing Escape, or clicking the close button.
+
 **Text alignment:** Use `textAlign` field to control text alignment for page content. Options: `"left"` (default), `"center"`, or `"right"`. Used by `home.md` to control home intro alignment.
 
 ### Home intro content
@@ -1021,6 +1023,7 @@ When `requireAuth` is `false`, the dashboard is open access. When `requireAuth` 
 ### Content Management
 
 **Posts and Pages List Views:**
+
 - View all posts and pages (published and unpublished)
 - Filter by status: All, Published, Drafts
 - Search by title or content
@@ -1030,6 +1033,7 @@ When `requireAuth` is `false`, the dashboard is open access. When `requireAuth` 
 - WordPress-style UI with date, edit, view, and publish controls
 
 **Post and Page Editor:**
+
 - Markdown editor with live preview
 - Frontmatter sidebar on the right with all available fields
 - Draggable/resizable frontmatter sidebar (200px-600px width)
@@ -1041,6 +1045,7 @@ When `requireAuth` is `false`, the dashboard is open access. When `requireAuth` 
 - Preview uses ReactMarkdown with proper styling
 
 **Write Post and Write Page:**
+
 - Full-screen writing interface
 - Markdown editor with word/line/character counts
 - Frontmatter reference panel
@@ -1071,6 +1076,7 @@ All newsletter sections are full-width in the dashboard content area.
 ### Content Import
 
 **Firecrawl Import:**
+
 - Import articles from external URLs using Firecrawl API
 - Requires `FIRECRAWL_API_KEY` in `.env.local`
 - Creates local markdown drafts in `content/blog/`
@@ -1080,6 +1086,7 @@ All newsletter sections are full-width in the dashboard content area.
 ### Site Configuration
 
 **Config Generator:**
+
 - UI to configure all settings in `src/config/siteConfig.ts`
 - Generates downloadable `siteConfig.ts` file
 - Hybrid approach: dashboard generates config, file-based config continues to work
@@ -1096,6 +1103,7 @@ All newsletter sections are full-width in the dashboard content area.
   - And more
 
 **Index HTML Editor:**
+
 - View and edit `index.html` content
 - Meta tags, Open Graph, Twitter Cards, JSON-LD
 - Download updated HTML file
@@ -1111,6 +1119,7 @@ All newsletter sections are full-width in the dashboard content area.
 ### Sync Commands
 
 **Sync Content Section:**
+
 - UI with buttons for all sync operations
 - Development sync commands:
   - `npm run sync` - Sync markdown content
@@ -1127,6 +1136,7 @@ All newsletter sections are full-width in the dashboard content area.
 - Toast notifications for success/error feedback
 
 **Sync Server:**
+
 - Local HTTP server for executing commands from dashboard
 - Start with `npm run sync-server` (runs on localhost:3001)
 - Execute commands directly from dashboard with real-time output streaming
@@ -1136,6 +1146,7 @@ All newsletter sections are full-width in the dashboard content area.
 - Copy icons for `npm run sync-server` command in dashboard
 
 **Header Sync Buttons:**
+
 - Quick sync buttons in dashboard header (right side)
 - `npm run sync:all` (dev) button
 - `npm run sync:all:prod` (prod) button
@@ -1145,28 +1156,33 @@ All newsletter sections are full-width in the dashboard content area.
 ### Dashboard Features
 
 **Search:**
+
 - Search bar in header
 - Search dashboard features, page titles, and post content
 - Real-time results as you type
 
 **Theme and Font:**
+
 - Theme toggle (dark, light, tan, cloud)
 - Font switcher (serif, sans, monospace)
 - Preferences persist across sessions
 
 **Mobile Responsive:**
+
 - Fully responsive design
 - Mobile-optimized layout
 - Touch-friendly controls
 - Collapsible sidebar on mobile
 
 **Toast Notifications:**
+
 - Success, error, info, and warning notifications
 - Auto-dismiss after 4 seconds
 - Theme-aware styling
 - No browser default alerts
 
 **Command Modal:**
+
 - Shows sync command output
 - Copy command to clipboard
 - Close button to dismiss
@@ -1184,19 +1200,23 @@ All newsletter sections are full-width in the dashboard content area.
 ### Sync Commands Reference
 
 **Development:**
+
 - `npm run sync` - Sync markdown content to development Convex
 - `npm run sync:discovery` - Update discovery files (AGENTS.md, llms.txt) with development data
 - `npm run sync:all` - Run both content sync and discovery sync (development)
 
 **Production:**
+
 - `npm run sync:prod` - Sync markdown content to production Convex
 - `npm run sync:discovery:prod` - Update discovery files with production data
 - `npm run sync:all:prod` - Run both content sync and discovery sync (production)
 
 **Sync Server:**
+
 - `npm run sync-server` - Start local HTTP server for executing sync commands from dashboard UI
 
 **Content Import:**
+
 - `npm run import <url>` - Import external URL as markdown post (requires FIRECRAWL_API_KEY)
 
 **Note:** The dashboard provides a UI for these commands. When the sync server is running (`npm run sync-server`), you can execute commands directly from the dashboard with real-time output. Otherwise, the dashboard shows commands in a modal for copying to your terminal.

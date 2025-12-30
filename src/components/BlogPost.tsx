@@ -5,7 +5,7 @@ import remarkBreaks from "remark-breaks";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check, X } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import NewsletterSignup from "./NewsletterSignup";
 import ContactForm from "./ContactForm";
@@ -43,6 +43,53 @@ function CodeCopyButton({ code }: { code: string }) {
     >
       {copied ? <Check size={14} /> : <Copy size={14} />}
     </button>
+  );
+}
+
+// Image lightbox component
+function ImageLightbox({
+  src,
+  alt,
+  onClose,
+}: {
+  src: string;
+  alt: string;
+  onClose: () => void;
+}) {
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  React.useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", handleEscape);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  return (
+    <div className="image-lightbox-backdrop" onClick={handleBackdropClick}>
+      <button
+        className="image-lightbox-close"
+        onClick={onClose}
+        aria-label="Close lightbox"
+      >
+        <X size={24} />
+      </button>
+      <div className="image-lightbox-content">
+        <img src={src} alt={alt} className="image-lightbox-image" />
+        {alt && <div className="image-lightbox-caption">{alt}</div>}
+      </div>
+    </div>
   );
 }
 
@@ -396,6 +443,8 @@ function HeadingAnchor({ id }: { id: string }) {
 
 export default function BlogPost({ content, slug, pageType = "post" }: BlogPostProps) {
   const { theme } = useTheme();
+  const [lightboxImage, setLightboxImage] = useState<{ src: string; alt: string } | null>(null);
+  const isLightboxEnabled = siteConfig.imageLightbox?.enabled !== false;
 
   const getCodeTheme = () => {
     switch (theme) {
@@ -479,13 +528,20 @@ export default function BlogPost({ content, slug, pageType = "post" }: BlogPostP
           );
         },
         img({ src, alt }) {
+          const handleImageClick = () => {
+            if (isLightboxEnabled && src) {
+              setLightboxImage({ src, alt: alt || "" });
+            }
+          };
           return (
             <span className="blog-image-wrapper">
               <img
                 src={src}
                 alt={alt || ""}
-                className="blog-image"
+                className={`blog-image ${isLightboxEnabled ? "blog-image-clickable" : ""}`}
                 loading="lazy"
+                onClick={isLightboxEnabled ? handleImageClick : undefined}
+                style={isLightboxEnabled ? { cursor: "pointer" } : undefined}
               />
               {alt && <span className="blog-image-caption">{alt}</span>}
             </span>
@@ -611,41 +667,51 @@ export default function BlogPost({ content, slug, pageType = "post" }: BlogPostP
   // Render with inline embeds if placeholders exist
   if (hasInlineEmbeds) {
     return (
-      <article className="blog-post-content">
-        {segments.map((segment, index) => {
-          if (segment.type === "newsletter") {
-            // Newsletter signup inline
-            return siteConfig.newsletter?.enabled ? (
-              <NewsletterSignup
-                key={`newsletter-${index}`}
-                source={pageType === "page" ? "post" : "post"}
-                postSlug={slug}
-              />
-            ) : null;
-          }
-          if (segment.type === "contactform") {
-            // Contact form inline
-            return siteConfig.contactForm?.enabled ? (
-              <ContactForm
-                key={`contactform-${index}`}
-                source={source}
-              />
-            ) : null;
-          }
-          // Markdown content segment
-          return renderMarkdown(segment.value, index);
-        })}
-      </article>
+      <>
+        <article className="blog-post-content">
+          {segments.map((segment, index) => {
+            if (segment.type === "newsletter") {
+              // Newsletter signup inline
+              return siteConfig.newsletter?.enabled ? (
+                <NewsletterSignup
+                  key={`newsletter-${index}`}
+                  source={pageType === "page" ? "post" : "post"}
+                  postSlug={slug}
+                />
+              ) : null;
+            }
+            if (segment.type === "contactform") {
+              // Contact form inline
+              return siteConfig.contactForm?.enabled ? (
+                <ContactForm
+                  key={`contactform-${index}`}
+                  source={source}
+                />
+              ) : null;
+            }
+            // Markdown content segment
+            return renderMarkdown(segment.value, index);
+          })}
+        </article>
+        {lightboxImage && (
+          <ImageLightbox
+            src={lightboxImage.src}
+            alt={lightboxImage.alt}
+            onClose={() => setLightboxImage(null)}
+          />
+        )}
+      </>
     );
   }
 
   // No inline embeds, render content normally
   return (
-    <article className="blog-post-content">
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkBreaks]}
-        rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
-        components={{
+    <>
+      <article className="blog-post-content">
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm, remarkBreaks]}
+          rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
+          components={{
           code(codeProps) {
             const { className, children, node, style, ...restProps } = codeProps as {
               className?: string;
@@ -702,13 +768,20 @@ export default function BlogPost({ content, slug, pageType = "post" }: BlogPostP
             );
           },
           img({ src, alt }) {
+            const handleImageClick = () => {
+              if (isLightboxEnabled && src) {
+                setLightboxImage({ src, alt: alt || "" });
+              }
+            };
             return (
               <span className="blog-image-wrapper">
                 <img
                   src={src}
                   alt={alt || ""}
-                  className="blog-image"
+                  className={`blog-image ${isLightboxEnabled ? "blog-image-clickable" : ""}`}
                   loading="lazy"
+                  onClick={isLightboxEnabled ? handleImageClick : undefined}
+                  style={isLightboxEnabled ? { cursor: "pointer" } : undefined}
                 />
                 {alt && <span className="blog-image-caption">{alt}</span>}
               </span>
@@ -821,10 +894,18 @@ export default function BlogPost({ content, slug, pageType = "post" }: BlogPostP
           td({ children }) {
             return <td className="blog-td">{children}</td>;
           },
-        }}
-      >
-        {cleanedContent}
-      </ReactMarkdown>
-    </article>
+          }}
+        >
+          {cleanedContent}
+        </ReactMarkdown>
+      </article>
+      {lightboxImage && (
+        <ImageLightbox
+          src={lightboxImage.src}
+          alt={lightboxImage.alt}
+          onClose={() => setLightboxImage(null)}
+        />
+      )}
+    </>
   );
 }

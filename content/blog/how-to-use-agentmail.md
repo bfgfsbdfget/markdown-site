@@ -5,7 +5,8 @@ date: "2025-12-27"
 slug: "how-to-use-agentmail"
 published: true
 featured: true
-featuredOrder: 3
+featuredOrder: 5
+layout: "sidebar"
 blogFeatured: true
 image: /images/agentmail-blog.png
 tags: ["agentmail", "newsletter", "email", "setup"]
@@ -101,6 +102,72 @@ npm run newsletter:send:stats
 2. Select "Send Post" or "Write Email" from the sidebar
 3. Choose a post or compose a custom email
 4. Click "Send Newsletter"
+
+### Customizing email footers
+
+All newsletter emails include a footer with unsubscribe information. Edit the footer text in `convex/newsletterActions.ts`.
+
+The footer appears in three functions:
+
+**1. Post newsletter (`sendPostNewsletter`)**
+
+HTML footer (lines 138-141):
+
+```typescript
+<p style="font-size: 12px; color: #888;">
+  You received this email because you subscribed to ${escapeHtml(siteName)}.<br />
+  <a href="${unsubscribeUrl}" style="color: #888;">Unsubscribe</a>
+</p>
+```
+
+Plain text footer (line 146):
+
+```typescript
+const text = `${post.title}\n\n${post.description}\n\nRead more: ${postUrl}\n\n---\nUnsubscribe: ${unsubscribeUrl}`;
+```
+
+**2. Weekly digest (`sendWeeklyDigest`)**
+
+HTML footer (lines 295-298):
+
+```typescript
+<p style="font-size: 12px; color: #888;">
+  You received this email because you subscribed to ${escapeHtml(siteName)}.<br />
+  <a href="${unsubscribeUrl}" style="color: #888;">Unsubscribe</a>
+</p>
+```
+
+Plain text footer (line 302):
+
+```typescript
+const text = `Weekly Digest - ${recentPosts.length} new post${recentPosts.length > 1 ? "s" : ""}\n\n${postsText}\n\n---\nUnsubscribe: ${unsubscribeUrl}`;
+```
+
+**3. Custom newsletter (`sendCustomNewsletter`)**
+
+HTML footer (lines 512-515):
+
+```typescript
+<p style="font-size: 12px; color: #888;">
+  You received this email because you subscribed to ${escapeHtml(siteName)}.<br />
+  <a href="${unsubscribeUrl}" style="color: #888;">Unsubscribe</a>
+</p>
+```
+
+Plain text footer (line 519):
+
+```typescript
+const text = `${contentText}\n\n---\nUnsubscribe: ${unsubscribeUrl}`;
+```
+
+**Customization options:**
+
+- Change the message text ("You received this email because...")
+- Modify the unsubscribe link text ("Unsubscribe")
+- Adjust styling (font size, color, spacing)
+- Add additional footer content
+
+Edit all three locations to keep footers consistent across email types. The unsubscribe URL is automatically generated and must remain in the footer for compliance.
 
 ### Weekly digest
 

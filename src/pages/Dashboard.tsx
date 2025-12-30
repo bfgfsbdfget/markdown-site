@@ -3636,6 +3636,8 @@ function ConfigSection({
     mcpServerEnabled: siteConfig.mcpServer?.enabled || false,
     mcpServerEndpoint: siteConfig.mcpServer?.endpoint || "/mcp",
     mcpServerRequireAuth: siteConfig.mcpServer?.requireAuth || false,
+    // Image lightbox
+    imageLightboxEnabled: siteConfig.imageLightbox?.enabled !== false,
   });
 
   const [copied, setCopied] = useState(false);
@@ -3795,6 +3797,12 @@ export const siteConfig: SiteConfig = {
   newsletterNotifications: { enabled: true, newSubscriberAlert: true, weeklyStatsSummary: true },
   weeklyDigest: { enabled: true, dayOfWeek: 0, subject: "Weekly Digest" },
   mcpServer: { enabled: ${config.mcpServerEnabled}, endpoint: "${config.mcpServerEndpoint}", publicRateLimit: 50, authenticatedRateLimit: 1000, requireAuth: ${config.mcpServerRequireAuth} },
+  
+  // Image lightbox configuration
+  // Enables click-to-magnify functionality for images in blog posts and pages
+  imageLightbox: {
+    enabled: ${config.imageLightboxEnabled},
+  },
 };
 
 export default siteConfig;
@@ -4580,6 +4588,23 @@ export default siteConfig;
                 }
               />
               <span>Require authentication</span>
+            </label>
+          </div>
+        </div>
+
+        {/* Image Lightbox */}
+        <div className="dashboard-config-card">
+          <h3>Image Lightbox</h3>
+          <div className="config-field checkbox">
+            <label>
+              <input
+                type="checkbox"
+                checked={config.imageLightboxEnabled}
+                onChange={(e) =>
+                  handleChange("imageLightboxEnabled", e.target.checked)
+                }
+              />
+              <span>Enable image lightbox (click images to magnify)</span>
             </label>
           </div>
         </div>

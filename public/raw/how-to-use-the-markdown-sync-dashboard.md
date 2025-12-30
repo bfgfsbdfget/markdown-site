@@ -11,6 +11,8 @@ Tags: dashboard, tutorial, content-management
 
 # How to use the Markdown sync dashboard
 
+![Dashboard home](/images/dashboard1.png)
+
 The dashboard at `/dashboard` gives you a centralized interface for managing your markdown blog. You can edit posts, sync content, configure settings, and more without switching between your editor and terminal.
 
 ## Accessing the dashboard
@@ -48,6 +50,8 @@ Posts and pages display with their titles, publication status, and last modified
 
 ### Post and page editor
 
+![editor](/images/dashboard3.png)
+
 Edit markdown content with a live preview. The editor includes:
 
 - Markdown editor on the left
@@ -73,6 +77,8 @@ Write your content, fill in frontmatter fields, then download the markdown file.
 
 ## AI Agent
 
+![AI Agent](/images/dashboard4.png)
+
 The dashboard includes a dedicated AI chat section separate from the Write page. Use it for:
 
 - Writing assistance
@@ -84,6 +90,7 @@ The AI Agent uses Anthropic Claude API and requires `ANTHROPIC_API_KEY` in your 
 
 ## Newsletter management
 
+![Newsletter management](/images/dashboard5.png)
 All Newsletter Admin features are integrated into the dashboard:
 
 - Subscribers: View, search, filter, and delete subscribers
@@ -108,6 +115,8 @@ Imported posts are created as drafts (`published: false`) by default. Review, ed
 Firecrawl import requires `FIRECRAWL_API_KEY` in your `.env.local` file.
 
 ## Site configuration
+
+![site config](/images/dashboard6.png)
 
 The Config Generator UI lets you configure all `siteConfig.ts` settings from the dashboard:
 
@@ -147,6 +156,8 @@ The dashboard includes a real-time stats section (clone of `/stats` page):
 Stats update automatically via Convex subscriptions. No page refresh needed.
 
 ## Sync commands
+
+![Sync commands](/images/dashboard7.png)
 
 Run sync operations from the dashboard without opening a terminal:
 

@@ -1686,12 +1686,120 @@ body {
   display: block;
 }
 
+.blog-image-clickable {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.blog-image-clickable:hover {
+  opacity: 0.9;
+}
+
 .blog-image-caption {
   display: block;
   font-size: var(--font-size-image-caption);
   color: var(--text-muted);
   text-align: center;
   margin-top: 12px;
+}
+
+/* Image lightbox styles */
+.image-lightbox-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: lightboxFadeIn 0.2s ease;
+}
+
+@keyframes lightboxFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.image-lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  z-index: 10001;
+}
+
+.image-lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.image-lightbox-content {
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.image-lightbox-image {
+  max-width: 100%;
+  max-height: calc(90vh - 60px);
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.image-lightbox-caption {
+  color: #fff;
+  font-size: var(--font-size-base);
+  text-align: center;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+@media (max-width: 768px) {
+  .image-lightbox-backdrop {
+    padding: 10px;
+  }
+
+  .image-lightbox-close {
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .image-lightbox-content {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+
+  .image-lightbox-image {
+    max-height: calc(95vh - 60px);
+  }
+
+  .image-lightbox-caption {
+    font-size: var(--font-size-sm);
+    padding: 0 10px;
+  }
 }
 
 /* Post footer styles */

@@ -4,6 +4,134 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.46.0] - 2025-12-29
+
+### Added
+
+- Dashboard sync server for executing sync commands from UI
+  - Local HTTP server (`scripts/sync-server.ts`) runs on localhost:3001
+  - Execute sync commands directly from dashboard without opening terminal
+  - Real-time output streaming in dashboard terminal view
+  - Server status indicator (online/offline) in dashboard sync section
+  - Copy and Execute buttons for each sync command
+  - Optional token authentication via `SYNC_TOKEN` environment variable
+  - Whitelisted commands only (sync, sync:prod, sync:discovery, sync:discovery:prod, sync:all, sync:all:prod)
+  - Health check endpoint at `/health` for server availability
+  - CORS enabled for localhost:5173 (dev server)
+  - Header sync buttons use sync server when available, fallback to command modal
+  - Copy icons for `npm run sync-server` command in dashboard sync settings
+
+### Technical
+
+- New file: `scripts/sync-server.ts` - Local HTTP server using Node.js http module
+- New npm script: `sync-server` - Start the local sync server
+- Updated: `src/pages/Dashboard.tsx` - Sync server integration with health checks, execute functionality, and terminal output display
+- Updated: `src/styles/global.css` - Styles for sync server status, terminal output, and copy buttons
+
+## [1.45.0] - 2025-12-29
+
+### Added
+
+- Dashboard and WorkOS authentication integration
+  - Dashboard supports optional WorkOS authentication via `siteConfig.dashboard.requireAuth`
+  - WorkOS is optional - dashboard works with or without WorkOS configured
+  - When `requireAuth` is `false`, dashboard is open access
+  - When `requireAuth` is `true` and WorkOS is configured, dashboard requires login
+  - Shows setup instructions if `requireAuth` is `true` but WorkOS is not configured
+  - Warning banner displayed when authentication is not enabled
+- Blog posts
+  - "How to use the Markdown sync dashboard" - Complete guide to dashboard features and usage
+  - "How to setup WorkOS" - Step-by-step WorkOS AuthKit setup guide
+- Documentation updates
+  - README.md: Added dashboard and WorkOS section with links to blog posts
+  - docs.md: Added dashboard and WorkOS authentication sections
+  - setup-guide.md: Added dashboard and WorkOS authentication sections
+  - FORK_CONFIG.md: Added dashboard configuration information
+  - fork-config.json.example: Added dashboard configuration option
+  - files.md: Updated with dashboard and WorkOS file descriptions
+
+### Technical
+
+- New file: `src/utils/workos.ts` - WorkOS configuration utility
+- Updated: `src/main.tsx` - Conditional WorkOS providers with lazy loading
+- Updated: `src/App.tsx` - Callback route handling for WorkOS OAuth
+- Updated: `src/pages/Dashboard.tsx` - Optional WorkOS authentication integration
+- Updated: `src/pages/Callback.tsx` - OAuth callback handler for WorkOS
+- Updated: `convex/auth.config.ts` - Convex authentication configuration for WorkOS
+- Updated: `src/config/siteConfig.ts` - Dashboard configuration with requireAuth option
+
+## [1.44.0] - 2025-12-29
+
+### Added
+
+- Dashboard at `/dashboard` for centralized content management and site configuration
+  - Content management: Posts and Pages list views with filtering, search, pagination, and items per page selector (15, 25, 50, 100)
+  - Post and Page editor: Markdown editor with live preview, draggable/resizable frontmatter sidebar (200px-600px), independent scrolling, download markdown, copy to clipboard
+  - Write Post and Write Page: Full-screen writing interface with markdown editor, frontmatter reference, download markdown, localStorage persistence
+  - AI Agent section: Dedicated AI chat separate from Write page, uses Anthropic Claude API, per-session chat history, markdown rendering
+  - Newsletter management: All Newsletter Admin features integrated (subscribers, send newsletter, write email, recent sends, email stats)
+  - Content import: Firecrawl import UI for importing external URLs as markdown drafts
+  - Site configuration: Config Generator UI for all `siteConfig.ts` settings, generates downloadable config file
+  - Index HTML editor: View and edit `index.html` content with meta tags, Open Graph, Twitter Cards, JSON-LD
+  - Analytics: Real-time stats dashboard (clone of `/stats` page, always accessible in dashboard)
+  - Sync commands: UI with buttons for all sync operations (sync, sync:discovery, sync:all for dev and prod)
+  - Header sync buttons: Quick sync buttons in dashboard header for `npm run sync:all` (dev and prod)
+  - Dashboard search: Search bar in header to search dashboard features, page titles, and post content
+  - Toast notifications: Success, error, info, and warning notifications with auto-dismiss
+  - Command modal: Shows sync command output with copy to clipboard functionality
+  - Mobile responsive: Fully responsive design with mobile-optimized layout
+  - Theme and font: Theme toggle and font switcher with persistent preferences
+
+### Technical
+
+- New page: `src/pages/Dashboard.tsx` (4736 lines)
+- Dashboard uses Convex queries for real-time data
+- All mutations follow Convex best practices (idempotent, indexed queries)
+- Frontmatter sidebar width persisted in localStorage
+- Editor content persisted in localStorage
+- Independent scrolling for editor and sidebar sections
+- Preview uses ReactMarkdown with remark-gfm, remark-breaks, rehype-raw, rehype-sanitize
+- CSS styles added for dashboard layout, tables, editor, frontmatter sidebar, config generator, newsletter sections, stats sections, sync sections, toast notifications, command modal
+- Mobile responsive breakpoints for all dashboard sections
+
+## [1.43.0] - 2025-12-29
+
+### Added
+
+- Stats page configuration option for public/private access
+  - New `StatsPageConfig` interface in `siteConfig.ts` with `enabled` and `showInNav` options
+  - Stats page can be made private by setting `enabled: false` (similar to NewsletterAdmin pattern)
+  - When disabled, route shows "Stats page is disabled" message instead of analytics
+  - Navigation item automatically hidden when stats page is disabled
+  - Default configuration: `enabled: true` (public), `showInNav: true` (visible in nav)
+
+### Technical
+
+- Updated: `src/config/siteConfig.ts` (added StatsPageConfig interface and default config)
+- Updated: `src/App.tsx` (conditionally renders /stats route based on config)
+- Updated: `src/pages/Stats.tsx` (checks if enabled, shows disabled message if not)
+- Updated: `src/components/Layout.tsx` (hides stats nav item when disabled)
+
+## [1.42.0] - 2025-12-29
+
+### Added
+
+- Honeypot bot protection for contact and newsletter forms
+  - Hidden honeypot fields invisible to humans but visible to bots
+  - Contact form uses hidden "Website" field for bot detection
+  - Newsletter signup uses hidden "Fax" field for bot detection
+  - Bots that fill hidden fields receive fake success message (no data submitted)
+  - No external dependencies required (client-side only protection)
+  - Works with all four themes (dark, light, tan, cloud)
+
+### Technical
+
+- Updated: `src/components/ContactForm.tsx` (added honeypot state, hidden field, bot detection logic)
+- Updated: `src/components/NewsletterSignup.tsx` (added honeypot state, hidden field, bot detection logic)
+- Honeypot fields use CSS positioning (position: absolute, left: -9999px) to hide from users
+- Fields include aria-hidden="true" and tabIndex={-1} for accessibility
+- Different field names per form (website/fax) to avoid pattern detection
+
 ## [1.41.0] - 2025-12-28
 
 ### Added
@@ -37,9 +165,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - New `content/pages/home.md` file for homepage intro/bio text
   - Home intro content now syncs with `npm run sync` like other pages
   - No redeploy needed for homepage text changes
-  - Full markdown support with links: `[text](url)`
+  - Full markdown support: links, headings, lists, blockquotes, horizontal rules
   - External links automatically open in new tab
-  - Fallback to `siteConfig.bio` if page not found
+  - Fallback to `siteConfig.bio` if page not found or while loading
 - New `textAlign` frontmatter field for pages
   - Control text alignment: "left", "center", "right"
   - Default: "left" (previously was always centered)

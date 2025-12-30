@@ -14,6 +14,7 @@ interface NewsletterSignupProps {
 // Newsletter signup component
 // Displays email input form for newsletter subscriptions
 // Integrates with Convex backend for subscriber management
+// Includes honeypot field for bot protection
 export default function NewsletterSignup({
   source,
   postSlug,
@@ -21,6 +22,7 @@ export default function NewsletterSignup({
   description,
 }: NewsletterSignupProps) {
   const [email, setEmail] = useState("");
+  const [honeypot, setHoneypot] = useState(""); // Honeypot field for bot detection
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
@@ -48,6 +50,15 @@ export default function NewsletterSignup({
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Honeypot check: if filled, silently reject (bot detected)
+    if (honeypot) {
+      // Pretend success to not alert the bot
+      setStatus("success");
+      setMessage("Thanks for subscribing!");
+      setEmail("");
+      return;
+    }
 
     if (!email.trim()) {
       setStatus("error");
@@ -88,6 +99,31 @@ export default function NewsletterSignup({
           <p className="newsletter-signup__success">{message}</p>
         ) : (
           <form onSubmit={handleSubmit} className="newsletter-signup__form">
+            {/* Honeypot field: hidden from humans, visible to bots */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                left: "-9999px",
+                top: "-9999px",
+                opacity: 0,
+                pointerEvents: "none",
+                height: 0,
+                overflow: "hidden",
+              }}
+            >
+              <label htmlFor={`newsletter-fax-${source}`}>Fax</label>
+              <input
+                id={`newsletter-fax-${source}`}
+                type="text"
+                name="fax"
+                tabIndex={-1}
+                autoComplete="off"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+              />
+            </div>
+
             <input
               type="email"
               value={email}

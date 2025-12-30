@@ -11,7 +11,9 @@ Tags: markdown, tutorial, code
 
 # Writing Markdown with Code Examples
 
-This post demonstrates how to write markdown content with code blocks, tables, and formatting. Use it as a reference when creating your own posts.
+This post is the complete reference for all markdown syntax used in this framework. It includes copy-paste examples for code blocks, tables, lists, links, images, collapsible sections, and all formatting options.
+
+**Use this post as your reference** when writing blog posts or pages. All examples are ready to copy and paste directly into your markdown files.
 
 ## Frontmatter
 

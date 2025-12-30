@@ -7,7 +7,7 @@ order: -1
 textAlign: "left"
 ---
 
-An open-source publishing framework built for AI agents and developers to ship websites, docs, or blogs.
+An open-source publishing framework built for AI agents and developers to ship **websites**, **docs**, or **blogs**.
 
 Write markdown, sync from the terminal. [Fork it](https://github.com/waynesutton/markdown-site), customize it, ship it.
 

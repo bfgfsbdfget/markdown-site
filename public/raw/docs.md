@@ -2,7 +2,7 @@
 
 ---
 Type: page
-Date: 2025-12-29
+Date: 2025-12-30
 ---
 
 ## Getting Started
@@ -78,6 +78,8 @@ markdown-site/
 ```
 
 ## Content
+
+**Markdown examples:** For complete markdown syntax examples including code blocks, tables, lists, links, images, collapsible sections, and all formatting options, see [Writing Markdown with Code Examples](/markdown-with-code-examples). That post includes copy-paste examples for every markdown feature.
 
 ### Blog posts
 
@@ -999,6 +1001,206 @@ npm run newsletter:send setup-guide
 
 The `newsletter:send` command calls the `scheduleSendPostNewsletter` mutation directly and sends emails in the background. Check the Newsletter Admin page or recent sends to see results.
 
+## Dashboard
+
+The Dashboard at `/dashboard` provides a centralized UI for managing content, configuring the site, and performing sync operations. It's designed for developers who fork the repository to set up and manage their markdown blog.
+
+**Access:** Navigate to `/dashboard` in your browser. The dashboard is not linked in the navigation by default (similar to Newsletter Admin pattern).
+
+**Authentication:** WorkOS authentication is optional. Configure it in `siteConfig.ts`:
+
+```typescript
+dashboard: {
+  enabled: true,
+  requireAuth: false, // Set to true to require WorkOS authentication
+},
+```
+
+When `requireAuth` is `false`, the dashboard is open access. When `requireAuth` is `true` and WorkOS is configured, users must log in to access the dashboard. See [How to setup WorkOS](https://www.markdown.fast/how-to-setup-workos) for authentication setup.
+
+### Content Management
+
+**Posts and Pages List Views:**
+- View all posts and pages (published and unpublished)
+- Filter by status: All, Published, Drafts
+- Search by title or content
+- Pagination with "First" and "Next" buttons
+- Items per page selector (15, 25, 50, 100) - default: 15
+- Edit, view, and publish/unpublish options
+- WordPress-style UI with date, edit, view, and publish controls
+
+**Post and Page Editor:**
+- Markdown editor with live preview
+- Frontmatter sidebar on the right with all available fields
+- Draggable/resizable frontmatter sidebar (200px-600px width)
+- Independent scrolling for frontmatter sidebar
+- Preview mode shows content as it appears on the live site
+- Download markdown button to generate `.md` files
+- Copy markdown to clipboard
+- All frontmatter fields editable in sidebar
+- Preview uses ReactMarkdown with proper styling
+
+**Write Post and Write Page:**
+- Full-screen writing interface
+- Markdown editor with word/line/character counts
+- Frontmatter reference panel
+- Download markdown button for new content
+- Content persists in localStorage
+- Separate storage for post and page content
+
+### AI Agent
+
+- Dedicated AI chat section separate from the Write page
+- Uses Anthropic Claude API (requires `ANTHROPIC_API_KEY` in Convex environment)
+- Per-session chat history stored in Convex
+- Markdown rendering for AI responses
+- Copy functionality for AI responses
+
+### Newsletter Management
+
+All Newsletter Admin features integrated into the Dashboard:
+
+- **Subscribers:** View, search, filter, and delete subscribers
+- **Send Newsletter:** Select a blog post to send as newsletter
+- **Write Email:** Compose custom emails with markdown support
+- **Recent Sends:** View last 10 newsletter sends (posts and custom emails)
+- **Email Stats:** Dashboard with total emails, newsletters sent, active subscribers, retention rate
+
+All newsletter sections are full-width in the dashboard content area.
+
+### Content Import
+
+**Firecrawl Import:**
+- Import articles from external URLs using Firecrawl API
+- Requires `FIRECRAWL_API_KEY` in `.env.local`
+- Creates local markdown drafts in `content/blog/`
+- Imported posts are drafts (`published: false`) by default
+- Review, edit, set `published: true`, then sync
+
+### Site Configuration
+
+**Config Generator:**
+- UI to configure all settings in `src/config/siteConfig.ts`
+- Generates downloadable `siteConfig.ts` file
+- Hybrid approach: dashboard generates config, file-based config continues to work
+- Includes all site configuration options:
+  - Site name, title, logo, bio, intro
+  - Blog page settings
+  - Featured section configuration
+  - Logo gallery settings
+  - GitHub contributions
+  - Footer and social footer
+  - Newsletter settings
+  - Contact form settings
+  - Stats page settings
+  - And more
+
+**Index HTML Editor:**
+- View and edit `index.html` content
+- Meta tags, Open Graph, Twitter Cards, JSON-LD
+- Download updated HTML file
+
+### Analytics
+
+- Real-time stats dashboard (clone of `/stats` page)
+- Active visitors with per-page breakdown
+- Total page views and unique visitors
+- Views by page sorted by popularity
+- Does not follow `siteConfig.statsPage` settings (always accessible in dashboard)
+
+### Sync Commands
+
+**Sync Content Section:**
+- UI with buttons for all sync operations
+- Development sync commands:
+  - `npm run sync` - Sync markdown content
+  - `npm run sync:discovery` - Update discovery files (AGENTS.md, llms.txt)
+  - `npm run sync:all` - Sync content + discovery files together
+- Production sync commands:
+  - `npm run sync:prod` - Sync markdown content
+  - `npm run sync:discovery:prod` - Update discovery files
+  - `npm run sync:all:prod` - Sync content + discovery files together
+- Server status indicator shows if sync server is online
+- Copy and Execute buttons for each command
+- Real-time terminal output when sync server is running
+- Command modal shows full command output when sync server is offline
+- Toast notifications for success/error feedback
+
+**Sync Server:**
+- Local HTTP server for executing commands from dashboard
+- Start with `npm run sync-server` (runs on localhost:3001)
+- Execute commands directly from dashboard with real-time output streaming
+- Optional token authentication via `SYNC_TOKEN` environment variable
+- Whitelisted commands only for security
+- Health check endpoint for server availability detection
+- Copy icons for `npm run sync-server` command in dashboard
+
+**Header Sync Buttons:**
+- Quick sync buttons in dashboard header (right side)
+- `npm run sync:all` (dev) button
+- `npm run sync:all:prod` (prod) button
+- One-click sync for all content and discovery files
+- Automatically use sync server when available, fallback to command modal
+
+### Dashboard Features
+
+**Search:**
+- Search bar in header
+- Search dashboard features, page titles, and post content
+- Real-time results as you type
+
+**Theme and Font:**
+- Theme toggle (dark, light, tan, cloud)
+- Font switcher (serif, sans, monospace)
+- Preferences persist across sessions
+
+**Mobile Responsive:**
+- Fully responsive design
+- Mobile-optimized layout
+- Touch-friendly controls
+- Collapsible sidebar on mobile
+
+**Toast Notifications:**
+- Success, error, info, and warning notifications
+- Auto-dismiss after 4 seconds
+- Theme-aware styling
+- No browser default alerts
+
+**Command Modal:**
+- Shows sync command output
+- Copy command to clipboard
+- Close button to dismiss
+- Theme-aware styling
+
+### Technical Details
+
+- Uses Convex queries for real-time data
+- All mutations follow Convex best practices (idempotent, indexed queries)
+- Frontmatter sidebar width persisted in localStorage
+- Editor content persisted in localStorage
+- Independent scrolling for editor and sidebar sections
+- Preview uses ReactMarkdown with remark-gfm, remark-breaks, rehype-raw, rehype-sanitize
+
+### Sync Commands Reference
+
+**Development:**
+- `npm run sync` - Sync markdown content to development Convex
+- `npm run sync:discovery` - Update discovery files (AGENTS.md, llms.txt) with development data
+- `npm run sync:all` - Run both content sync and discovery sync (development)
+
+**Production:**
+- `npm run sync:prod` - Sync markdown content to production Convex
+- `npm run sync:discovery:prod` - Update discovery files with production data
+- `npm run sync:all:prod` - Run both content sync and discovery sync (production)
+
+**Sync Server:**
+- `npm run sync-server` - Start local HTTP server for executing sync commands from dashboard UI
+
+**Content Import:**
+- `npm run import <url>` - Import external URL as markdown post (requires FIRECRAWL_API_KEY)
+
+**Note:** The dashboard provides a UI for these commands. When the sync server is running (`npm run sync-server`), you can execute commands directly from the dashboard with real-time output. Otherwise, the dashboard shows commands in a modal for copying to your terminal.
+
 ## API endpoints
 
 | Endpoint                       | Description                 |
@@ -1073,49 +1275,18 @@ When you run `npm run sync` (development) or `npm run sync:prod` (production), s
 
 These files include a metadata header with type, date, reading time, and tags. Access via the "View as Markdown" option in the Copy Page dropdown.
 
-## Markdown tables
+## Markdown formatting
 
-Tables render with GitHub-style formatting:
+For complete markdown syntax examples including tables, collapsible sections, code blocks, lists, links, images, and all formatting options, see [Writing Markdown with Code Examples](/markdown-with-code-examples).
 
-- Clean borders across all themes
-- Mobile responsive with horizontal scroll
-- Theme-aware alternating row colors
-- Hover states for readability
+**Quick reference:**
 
-Example:
+- **Tables:** Render with GitHub-style formatting, clean borders, mobile responsive
+- **Collapsible sections:** Use HTML `<details>` and `<summary>` tags for expandable content
+- **Code blocks:** Support syntax highlighting for TypeScript, JavaScript, bash, JSON, and more
+- **Images:** Place in `public/images/` and reference with absolute paths
 
-| Feature | Status |
-| ------- | ------ |
-| Borders | Clean  |
-| Mobile  | Scroll |
-| Themes  | All    |
-
-## Collapsible sections
-
-Create expandable/collapsible content using HTML `<details>` and `<summary>` tags:
-
-```html
-<details>
-  <summary>Click to expand</summary>
-
-  Hidden content here. Supports markdown: - Lists - **Bold** and _italic_ - Code
-  blocks
-</details>
-```
-
-**Expanded by default:** Add the `open` attribute:
-
-```html
-<details open>
-  <summary>Already expanded</summary>
-
-  This section starts open.
-</details>
-```
-
-**Nested sections:** You can nest `<details>` inside other `<details>` for multi-level collapsible content.
-
-Collapsible sections work with all four themes and are styled to match the site design.
+All markdown features work with all four themes and are styled to match the site design.
 
 ## Import external content
 

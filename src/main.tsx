@@ -1,25 +1,51 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { StrictMode, lazy, Suspense } from "react";
+import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import App from "./App";
+import { ConvexReactClient, ConvexProvider } from "convex/react";
 import { ThemeProvider } from "./context/ThemeContext";
 import { FontProvider } from "./context/FontContext";
+import { isWorkOSConfigured } from "./utils/workos";
 import "./styles/global.css";
 
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
+const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <ConvexProvider client={convex}>
-      <BrowserRouter>
-        <ThemeProvider>
-          <FontProvider>
-            <App />
-          </FontProvider>
-        </ThemeProvider>
-      </BrowserRouter>
-    </ConvexProvider>
-  </React.StrictMode>
+// Lazy load the appropriate App wrapper based on WorkOS configuration
+const AppWithWorkOS = lazy(() => import("./AppWithWorkOS"));
+const App = lazy(() => import("./App"));
+
+// Loading fallback
+function LoadingFallback() {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        fontFamily: "system-ui, sans-serif",
+      }}
+    >
+      Loading...
+    </div>
+  );
+}
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <BrowserRouter>
+      <ThemeProvider>
+        <FontProvider>
+          <Suspense fallback={<LoadingFallback />}>
+            {isWorkOSConfigured ? (
+              <AppWithWorkOS convex={convex} />
+            ) : (
+              <ConvexProvider client={convex}>
+                <App />
+              </ConvexProvider>
+            )}
+          </Suspense>
+        </FontProvider>
+      </ThemeProvider>
+    </BrowserRouter>
+  </StrictMode>,
 );
-

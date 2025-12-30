@@ -147,6 +147,10 @@
     "enabled": false,
     "dayOfWeek": 0,
     "subject": "Weekly Digest"
+  },
+  "dashboard": {
+    "enabled": true,
+    "requireAuth": false
   }
 }
 

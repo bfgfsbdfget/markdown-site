@@ -668,6 +668,49 @@ weeklyDigest: {
 
 Runs automatically via cron job every Sunday at 9:00 AM UTC.
 
+### Dashboard
+
+The dashboard at `/dashboard` provides a centralized UI for managing content, configuring the site, and performing sync operations.
+
+**Configuration:**
+
+In `src/config/siteConfig.ts`:
+
+```typescript
+dashboard: {
+  enabled: true,        // Global toggle for dashboard page
+  requireAuth: false,   // Set to true to require WorkOS authentication
+},
+```
+
+**Authentication:**
+
+WorkOS authentication is optional. When `requireAuth` is `false`, the dashboard is open access. When `requireAuth` is `true` and WorkOS is configured, users must log in to access the dashboard.
+
+**WorkOS Setup:**
+
+To enable WorkOS authentication:
+
+1. Create a WorkOS account at [workos.com](https://workos.com)
+2. Set `VITE_WORKOS_CLIENT_ID` in your `.env.local` file
+3. Set `VITE_WORKOS_REDIRECT_URI` (e.g., `http://localhost:5173/callback`)
+4. Add `WORKOS_CLIENT_ID` to Convex environment variables
+5. Configure redirect URI in WorkOS dashboard
+6. Set `requireAuth: true` in `siteConfig.ts`
+
+See [How to setup WorkOS](https://www.markdown.fast/how-to-setup-workos) for complete setup instructions.
+
+**Features:**
+
+- Content management: Edit posts and pages with live preview
+- Sync commands: Run sync operations from the browser
+- Site configuration: Configure all settings via UI
+- Newsletter management: Integrated subscriber and email management
+- AI Agent: Writing assistance powered by Claude
+- Analytics: Real-time stats dashboard
+
+See [How to use the Markdown sync dashboard](https://www.markdown.fast/how-to-use-the-markdown-sync-dashboard) for complete usage guide.
+
 ---
 
 ## Contact Form Configuration

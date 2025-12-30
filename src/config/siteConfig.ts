@@ -189,6 +189,14 @@ export interface MCPServerConfig {
   requireAuth: boolean; // Require API key for all requests
 }
 
+// Dashboard configuration
+// Controls access to the /dashboard admin page
+// WorkOS authentication is optional - if not configured, dashboard shows setup instructions
+export interface DashboardConfig {
+  enabled: boolean; // Global toggle for dashboard page
+  requireAuth: boolean; // Require WorkOS authentication (only works if WorkOS is configured)
+}
+
 // Social link configuration for social footer
 export interface SocialLink {
   platform:
@@ -302,6 +310,9 @@ export interface SiteConfig {
 
   // MCP Server configuration (optional)
   mcpServer?: MCPServerConfig;
+
+  // Dashboard configuration (optional)
+  dashboard?: DashboardConfig;
 }
 
 // Default site configuration
@@ -602,6 +613,17 @@ Created by [Wayne](https://x.com/waynesutton) with Convex, Cursor, and Claude Op
     publicRateLimit: 50, // Requests per minute for public access (Netlify rate limiting)
     authenticatedRateLimit: 1000, // Requests per minute with API key
     requireAuth: false, // Set to true to require API key for all requests
+  },
+
+  // Dashboard configuration
+  // Admin dashboard at /dashboard for managing content and settings
+  // WorkOS authentication is optional - if not configured, dashboard is open access
+  // Set enabled: false to disable the dashboard entirely
+  // WARNING: When requireAuth is false, anyone can access the dashboard
+  // For production, set up WorkOS and change requireAuth to true
+  dashboard: {
+    enabled: true, // Global toggle for dashboard page
+    requireAuth: true, // Set to true and configure WorkOS for secure authentication
   },
 };
 

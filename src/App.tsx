@@ -7,6 +7,8 @@ import Write from "./pages/Write";
 import TagPage from "./pages/TagPage";
 import Unsubscribe from "./pages/Unsubscribe";
 import NewsletterAdmin from "./pages/NewsletterAdmin";
+import Dashboard from "./pages/Dashboard";
+import Callback from "./pages/Callback";
 import Layout from "./components/Layout";
 import { usePageTracking } from "./hooks/usePageTracking";
 import { SidebarProvider } from "./context/SidebarContext";
@@ -25,6 +27,16 @@ function App() {
   // Newsletter admin page renders without Layout (full-screen admin)
   if (location.pathname === "/newsletter-admin") {
     return <NewsletterAdmin />;
+  }
+
+  // Dashboard renders without Layout (full-screen admin)
+  if (location.pathname === "/dashboard") {
+    return <Dashboard />;
+  }
+
+  // Callback handles OAuth redirect from WorkOS
+  if (location.pathname === "/callback") {
+    return <Callback />;
   }
 
   // Determine if we should use a custom homepage

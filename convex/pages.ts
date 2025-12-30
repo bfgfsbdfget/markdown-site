@@ -1,6 +1,57 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 
+// Get all pages (published and unpublished) for dashboard admin view
+export const listAll = query({
+  args: {},
+  returns: v.array(
+    v.object({
+      _id: v.id("pages"),
+      _creationTime: v.number(),
+      slug: v.string(),
+      title: v.string(),
+      content: v.string(),
+      published: v.boolean(),
+      order: v.optional(v.number()),
+      showInNav: v.optional(v.boolean()),
+      excerpt: v.optional(v.string()),
+      image: v.optional(v.string()),
+      featured: v.optional(v.boolean()),
+      featuredOrder: v.optional(v.number()),
+      authorName: v.optional(v.string()),
+      authorImage: v.optional(v.string()),
+    }),
+  ),
+  handler: async (ctx) => {
+    const pages = await ctx.db.query("pages").collect();
+
+    // Sort by order, then by title
+    const sortedPages = pages.sort((a, b) => {
+      const orderA = a.order ?? 999;
+      const orderB = b.order ?? 999;
+      if (orderA !== orderB) return orderA - orderB;
+      return a.title.localeCompare(b.title);
+    });
+
+    return sortedPages.map((page) => ({
+      _id: page._id,
+      _creationTime: page._creationTime,
+      slug: page.slug,
+      title: page.title,
+      content: page.content,
+      published: page.published,
+      order: page.order,
+      showInNav: page.showInNav,
+      excerpt: page.excerpt,
+      image: page.image,
+      featured: page.featured,
+      featuredOrder: page.featuredOrder,
+      authorName: page.authorName,
+      authorImage: page.authorImage,
+    }));
+  },
+});
+
 // Get all published pages for navigation
 export const getAllPages = query({
   args: {},

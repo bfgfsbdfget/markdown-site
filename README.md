@@ -153,6 +153,19 @@ See [How to Use the MCP Server](https://www.markdown.fast/how-to-use-mcp-server)
 - Run `npm run import <url>` to scrape and create draft posts locally
 - Then sync to dev or prod with `npm run sync` or `npm run sync:prod`
 
+### Dashboard
+
+The framework includes a centralized dashboard at `/dashboard` for managing content and configuring your site. Features include:
+
+- Content management: Edit posts and pages with live preview
+- Sync commands: Run sync operations from the browser
+- Site configuration: Configure all settings via UI
+- Newsletter management: Integrated subscriber and email management
+- AI Agent: Writing assistance powered by Claude
+- Analytics: Real-time stats dashboard
+
+WorkOS authentication is recommended so no one has access to your dashboard if it's enabled. Configure it in `siteConfig.ts` to protect the dashboard in production. See [How to use the Markdown sync dashboard](https://www.markdown.fast/how-to-use-the-markdown-sync-dashboard) and [How to setup WorkOS](https://www.markdown.fast/how-to-setup-workos) for details.
+
 ### Newsletter and Email
 
 The framework includes AgentMail integration for newsletter subscriptions and contact forms. Features include:

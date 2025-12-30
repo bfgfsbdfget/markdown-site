@@ -13,6 +13,7 @@ interface ContactFormProps {
 // Contact form component
 // Displays a form with name, email, and message fields
 // Submits to Convex which sends email via AgentMail
+// Includes honeypot field for bot protection
 export default function ContactForm({
   source,
   title,
@@ -21,6 +22,7 @@ export default function ContactForm({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [honeypot, setHoneypot] = useState(""); // Honeypot field for bot detection
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [statusMessage, setStatusMessage] = useState("");
 
@@ -35,6 +37,17 @@ export default function ContactForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Honeypot check: if filled, silently reject (bot detected)
+    if (honeypot) {
+      // Pretend success to not alert the bot
+      setStatus("success");
+      setStatusMessage("Thanks for your message! We'll get back to you soon.");
+      setName("");
+      setEmail("");
+      setMessage("");
+      return;
+    }
 
     // Basic validation
     if (!name.trim()) {
@@ -103,6 +116,31 @@ export default function ContactForm({
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="contact-form__form">
+            {/* Honeypot field: hidden from humans, visible to bots */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                left: "-9999px",
+                top: "-9999px",
+                opacity: 0,
+                pointerEvents: "none",
+                height: 0,
+                overflow: "hidden",
+              }}
+            >
+              <label htmlFor="contact-website">Website</label>
+              <input
+                id="contact-website"
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+              />
+            </div>
+
             <div className="contact-form__field">
               <label htmlFor="contact-name" className="contact-form__label">
                 Name

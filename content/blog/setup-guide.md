@@ -1589,6 +1589,67 @@ Agent requires the following Convex environment variables:
 
 If `ANTHROPIC_API_KEY` is not configured in Convex environment variables, Agent displays a user-friendly error message: "API key is not set". This helps identify when the API key is missing in production deployments.
 
+## Dashboard
+
+The Dashboard at `/dashboard` provides a centralized UI for managing content, configuring the site, and performing sync operations. It's designed for developers who fork the repository to set up and manage their markdown blog.
+
+**Access:** Navigate to `/dashboard` in your browser. The dashboard is not linked in the navigation by default.
+
+**Authentication:** WorkOS authentication is optional. Configure it in `siteConfig.ts`:
+
+```typescript
+dashboard: {
+  enabled: true,
+  requireAuth: false, // Set to true to require WorkOS authentication
+},
+```
+
+When `requireAuth` is `false`, the dashboard is open access. When `requireAuth` is `true` and WorkOS is configured, users must log in to access the dashboard. See [How to setup WorkOS](https://www.markdown.fast/how-to-setup-workos) for authentication setup.
+
+**Key Features:**
+
+- **Content Management:** Posts and Pages list views with filtering, search, pagination, and items per page selector
+- **Post/Page Editor:** Markdown editor with live preview, draggable/resizable frontmatter sidebar, download markdown
+- **Write Post/Page:** Full-screen writing interface with markdown editor and frontmatter reference
+- **AI Agent:** Dedicated AI chat section separate from Write page
+- **Newsletter Management:** All Newsletter Admin features integrated (subscribers, send newsletter, write email, recent sends, email stats)
+- **Content Import:** Firecrawl import UI for importing external URLs as markdown drafts
+- **Site Configuration:** Config Generator UI for all `siteConfig.ts` settings
+- **Index HTML Editor:** View and edit `index.html` content
+- **Analytics:** Real-time stats dashboard (always accessible in dashboard)
+- **Sync Commands:** UI with buttons for all sync operations (sync, sync:discovery, sync:all for dev and prod)
+- **Sync Server:** Execute sync commands directly from dashboard with real-time output
+- **Header Sync Buttons:** Quick sync buttons in dashboard header for `npm run sync:all` (dev and prod)
+
+**Sync Commands Available:**
+
+- `npm run sync` - Sync markdown content (development)
+- `npm run sync:prod` - Sync markdown content (production)
+- `npm run sync:discovery` - Update discovery files (development)
+- `npm run sync:discovery:prod` - Update discovery files (production)
+- `npm run sync:all` - Sync content + discovery files (development)
+- `npm run sync:all:prod` - Sync content + discovery files (production)
+- `npm run sync-server` - Start local HTTP server for executing commands from dashboard
+
+**Sync Server:**
+
+The dashboard can execute sync commands directly without opening a terminal. Start the sync server:
+
+```bash
+npm run sync-server
+```
+
+This starts a local HTTP server on `localhost:3001` that:
+- Executes sync commands when requested from the dashboard
+- Streams output in real-time to the dashboard terminal view
+- Shows server status (online/offline) in the dashboard
+- Supports optional token authentication via `SYNC_TOKEN` environment variable
+- Only executes whitelisted commands for security
+
+When the sync server is running, the dashboard shows "Execute" buttons that run commands directly. When offline, buttons show commands in a modal for copying to your terminal.
+
+The dashboard provides a UI for these commands, but you can also run them directly from the terminal. See the [Dashboard documentation](/docs#dashboard) for complete details.
+
 ## Next Steps
 
 After deploying:

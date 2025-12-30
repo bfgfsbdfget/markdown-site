@@ -2,10 +2,10 @@
 
 ---
 Type: page
-Date: 2025-12-29
+Date: 2025-12-30
 ---
 
-An open-source publishing framework built for AI agents and developers to ship websites, docs, or blogs.
+An open-source publishing framework built for AI agents and developers to ship **websites**, **docs**, or **blogs**.
 
 Write markdown, sync from the terminal. [Fork it](https://github.com/waynesutton/markdown-site), customize it, ship it.
 

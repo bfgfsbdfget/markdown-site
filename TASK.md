@@ -7,9 +7,32 @@
 
 ## Current Status
 
-v1.41.0 ready. Blog heading styles added to home intro content. Headings in `content/pages/home.md` now use same styling as blog posts (blog-h1 through blog-h6) with clickable anchor links. Home intro content matches blog post typography and spacing.
+v1.46.0 ready. Dashboard sync server feature complete. Local HTTP server allows executing sync commands directly from dashboard UI without opening terminal. Real-time output streaming, server status indicators, and copy/execute buttons implemented. Header sync buttons use sync server when available. Copy icons added for npm run sync-server command.
 
 ## Completed
+
+- [x] Stats page configuration option for public/private access
+  - [x] Added StatsPageConfig interface to siteConfig.ts with enabled and showInNav options
+  - [x] Updated App.tsx to conditionally render /stats route based on config
+  - [x] Updated Stats.tsx to check if enabled and show disabled message if not
+  - [x] Updated Layout.tsx to hide stats nav item when disabled
+  - [x] Default configuration: enabled: true (public), showInNav: true (visible in nav)
+  - [x] Follows same pattern as NewsletterAdmin for consistency
+  - [x] Updated files.md with stats page configuration notes
+  - [x] Updated changelog.md with v1.43.0 entry
+  - [x] Updated TASK.md with completed task
+
+- [x] Honeypot bot protection for contact and newsletter forms
+  - [x] Added honeypot state and hidden field to ContactForm.tsx
+  - [x] Added honeypot state and hidden field to NewsletterSignup.tsx
+  - [x] Hidden "Website" field for contact form bot detection
+  - [x] Hidden "Fax" field for newsletter signup bot detection
+  - [x] Bots receive fake success message (no data submitted)
+  - [x] CSS positioning (position: absolute, left: -9999px) hides fields from users
+  - [x] aria-hidden="true" and tabIndex={-1} for accessibility
+  - [x] Different field names per form to avoid pattern detection
+  - [x] Updated files.md with honeypot protection notes
+  - [x] Updated changelog.md with v1.42.0 entry
 
 - [x] Blog heading styles for home intro content
   - [x] Added generateSlug, getTextContent, HeadingAnchor helper functions to Home.tsx
@@ -19,6 +42,21 @@ v1.41.0 ready. Blog heading styles added to home intro content. Headings in `con
   - [x] Added blog styling for lists (blog-ul, blog-ol, blog-li), blockquotes (blog-blockquote), horizontal rules (blog-hr), and links (blog-link)
   - [x] Updated files.md, changelog.md, changelog-page.md, TASK.md with feature documentation
   - [x] Home intro headings now match blog post typography and spacing
+
+- [x] Synced home intro content via markdown file (home.md)
+  - [x] Created content/pages/home.md (slug: home-intro) for homepage intro text
+  - [x] Home.tsx fetches content from Convex via getPageBySlug query
+  - [x] Added textAlign frontmatter field for pages (left/center/right, default: left)
+  - [x] Added featuredTitle to siteConfig.ts for configurable featured section title
+  - [x] Full markdown support with links, headings, lists, blockquotes, horizontal rules
+  - [x] External links automatically open in new tab
+  - [x] Fallback to siteConfig.bio if home-intro page not found (loading/error states)
+  - [x] Content syncs with npm run sync (no redeploy needed for homepage text changes)
+  - [x] Updated convex/schema.ts with textAlign field
+  - [x] Updated convex/pages.ts with textAlign in queries and mutations
+  - [x] Updated scripts/sync-posts.ts to parse textAlign from frontmatter
+  - [x] Updated src/styles/global.css with home-intro-content styles
+  - [x] Updated files.md, changelog.md, TASK.md documentation
 
 - [x] HTTP-based MCP Server on Netlify
   - [x] Created netlify/edge-functions/mcp.ts with JSON-RPC 2.0 implementation

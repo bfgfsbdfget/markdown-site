@@ -9,6 +9,108 @@ layout: "sidebar"
 All notable changes to this project.
 ![](https://img.shields.io/badge/License-MIT-yellow.svg)
 
+## v1.46.0
+
+Released December 29, 2025
+
+**Dashboard sync server for executing sync commands from UI**
+
+- Local HTTP server for executing sync commands directly from dashboard
+  - Run `npm run sync-server` to start the local server on localhost:3001
+  - Execute sync commands without opening a terminal
+  - Real-time output streaming in dashboard terminal view
+  - Server status indicator shows online/offline status
+  - Copy and Execute buttons for each sync command
+  - Optional token authentication via `SYNC_TOKEN` environment variable
+  - Whitelisted commands only for security
+  - Health check endpoint for server availability detection
+  - Header sync buttons automatically use sync server when available
+  - Copy icons for `npm run sync-server` command throughout dashboard
+
+**Technical details:**
+
+- New `scripts/sync-server.ts` file implements local HTTP server
+- Uses Node.js `child_process.spawn` to execute npm commands
+- Streams output in real-time to dashboard UI
+- CORS enabled for localhost:5173 development server
+- Server binds to localhost only (not accessible from network)
+
+Updated files: `scripts/sync-server.ts`, `src/pages/Dashboard.tsx`, `src/styles/global.css`, `package.json`
+
+## v1.45.0
+
+Released December 29, 2025
+
+**Dashboard and WorkOS authentication integration**
+
+- Dashboard supports optional WorkOS authentication via `siteConfig.dashboard.requireAuth`
+- WorkOS is optional - dashboard works with or without WorkOS configured
+- When `requireAuth` is `false`, dashboard is open access
+- When `requireAuth` is `true` and WorkOS is configured, dashboard requires login
+- Shows setup instructions if `requireAuth` is `true` but WorkOS is not configured
+- Warning banner displayed when authentication is not enabled
+- Blog posts added: "How to use the Markdown sync dashboard" and "How to setup WorkOS"
+
+Updated files: `src/pages/Dashboard.tsx`, `src/main.tsx`, `src/App.tsx`, `src/pages/Callback.tsx`, `src/utils/workos.ts`, `convex/auth.config.ts`, `src/config/siteConfig.ts`, `README.md`, `content/pages/docs.md`, `content/blog/setup-guide.md`, `FORK_CONFIG.md`, `fork-config.json.example`, `files.md`, `TASK.md`, `changelog.md`, `content/pages/changelog-page.md`
+
+## v1.44.0
+
+Released December 29, 2025
+
+**Dashboard for centralized content management and site configuration**
+
+- Dashboard at `/dashboard` provides a centralized UI for managing content, configuring the site, and performing sync operations
+- Content management: Posts and Pages list views with filtering, search, pagination, and items per page selector (15, 25, 50, 100)
+- Post and Page editor: Markdown editor with live preview, draggable/resizable frontmatter sidebar (200px-600px), independent scrolling, download markdown, copy to clipboard
+- Write Post and Write Page: Full-screen writing interface with markdown editor, frontmatter reference, download markdown, localStorage persistence
+- AI Agent section: Dedicated AI chat separate from Write page, uses Anthropic Claude API, per-session chat history, markdown rendering
+- Newsletter management: All Newsletter Admin features integrated (subscribers, send newsletter, write email, recent sends, email stats)
+- Content import: Firecrawl import UI for importing external URLs as markdown drafts
+- Site configuration: Config Generator UI for all `siteConfig.ts` settings, generates downloadable config file
+- Index HTML editor: View and edit `index.html` content with meta tags, Open Graph, Twitter Cards, JSON-LD
+- Analytics: Real-time stats dashboard (clone of `/stats` page, always accessible in dashboard)
+- Sync commands: UI with buttons for all sync operations (sync, sync:discovery, sync:all for dev and prod)
+- Header sync buttons: Quick sync buttons in dashboard header for `npm run sync:all` (dev and prod)
+- Dashboard search: Search bar in header to search dashboard features, page titles, and post content
+- Toast notifications: Success, error, info, and warning notifications with auto-dismiss
+- Command modal: Shows sync command output with copy to clipboard functionality
+- Mobile responsive: Fully responsive design with mobile-optimized layout
+- Theme and font: Theme toggle and font switcher with persistent preferences
+
+Updated files: `src/pages/Dashboard.tsx`, `src/styles/global.css`, `src/App.tsx`
+
+## v1.43.0
+
+Released December 29, 2025
+
+**Stats page configuration option for public/private access**
+
+- New `StatsPageConfig` interface in `siteConfig.ts` with `enabled` and `showInNav` options
+- Stats page can be made private by setting `enabled: false` (similar to NewsletterAdmin pattern)
+- When disabled, route shows "Stats page is disabled" message instead of analytics
+- Navigation item automatically hidden when stats page is disabled
+- Default configuration: `enabled: true` (public), `showInNav: true` (visible in nav)
+
+Updated files: `src/config/siteConfig.ts`, `src/App.tsx`, `src/pages/Stats.tsx`, `src/components/Layout.tsx`
+
+## v1.42.0
+
+Released December 29, 2025
+
+**Honeypot bot protection for contact and newsletter forms**
+
+- Hidden honeypot fields invisible to humans but visible to bots
+- Contact form uses hidden "Website" field for bot detection
+- Newsletter signup uses hidden "Fax" field for bot detection
+- Bots that fill hidden fields receive fake success message (no data submitted)
+- No external dependencies required (client-side only protection)
+- Works with all four themes (dark, light, tan, cloud)
+
+Updated files: `src/components/ContactForm.tsx`, `src/components/NewsletterSignup.tsx`
+- Honeypot fields use CSS positioning (position: absolute, left: -9999px) to hide from users
+- Fields include aria-hidden="true" and tabIndex={-1} for accessibility
+- Different field names per form (website/fax) to avoid pattern detection
+
 ## v1.41.0
 
 Released December 28, 2025

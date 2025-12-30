@@ -1,6 +1,58 @@
 import { query, mutation, internalMutation, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
 
+// Get all posts (published and unpublished) for dashboard admin view
+export const listAll = query({
+  args: {},
+  returns: v.array(
+    v.object({
+      _id: v.id("posts"),
+      _creationTime: v.number(),
+      slug: v.string(),
+      title: v.string(),
+      description: v.string(),
+      content: v.string(),
+      date: v.string(),
+      published: v.boolean(),
+      tags: v.array(v.string()),
+      readTime: v.optional(v.string()),
+      image: v.optional(v.string()),
+      excerpt: v.optional(v.string()),
+      featured: v.optional(v.boolean()),
+      featuredOrder: v.optional(v.number()),
+      authorName: v.optional(v.string()),
+      authorImage: v.optional(v.string()),
+    }),
+  ),
+  handler: async (ctx) => {
+    const posts = await ctx.db.query("posts").collect();
+
+    // Sort by date descending
+    const sortedPosts = posts.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
+
+    return sortedPosts.map((post) => ({
+      _id: post._id,
+      _creationTime: post._creationTime,
+      slug: post.slug,
+      title: post.title,
+      description: post.description,
+      content: post.content,
+      date: post.date,
+      published: post.published,
+      tags: post.tags,
+      readTime: post.readTime,
+      image: post.image,
+      excerpt: post.excerpt,
+      featured: post.featured,
+      featuredOrder: post.featuredOrder,
+      authorName: post.authorName,
+      authorImage: post.authorImage,
+    }));
+  },
+});
+
 // Get all published posts, sorted by date descending
 export const getAllPosts = query({
   args: {},

